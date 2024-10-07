@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema(
+const wmaSchema = mongoose.Schema(
   {
-    username: {
+    wmaname: {
       type: String,
       required: true,
     },
     address: {
-      type: String,
-      required: true,
-    },
-    area: {
       type: String,
       required: true,
     },
@@ -22,6 +18,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    authNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     email: {
       type: String,
       required: true,
@@ -31,14 +32,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
   },
   { timestamps: true }
 );
-const User = mongoose.model("User", userSchema);
+const WMA = mongoose.model("WMA", wmaSchema);
 
-export default User;
+export default WMA;

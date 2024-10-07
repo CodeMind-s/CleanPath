@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
-import generateToken from "../utils/createToken.js";
+import { generateToken, generateWMAToken } from "../utils/createToken.js";
 
 /**
  * @route   POST /api/users
@@ -16,10 +16,11 @@ import generateToken from "../utils/createToken.js";
  * @throws  {500} If a server error occurs
  */
 const createUser = asyncHandler(async (req, res) => {
-  const { username, email, password, address, gender, ecoscore, contact, profileImage } = req.body;
+  const { username, address, area, contact, profileImage, email, password } =
+    req.body;
 
   // Check the body has necessary attributes
-  if (!username || !email || !password || !address || !gender || !ecoscore || !contact || !profileImage) {
+  if (!username || !address || !area || !contact || !email || !password) {
     throw new Error("Please fill all the inputs!!!");
   }
 
@@ -37,13 +38,12 @@ const createUser = asyncHandler(async (req, res) => {
   // Creating a user
   const newUser = new User({
     username,
-    email,
-    password: hashedPassword,
     address,
-    gender,
-    ecoscore, 
+    area,
     contact,
     profileImage,
+    email,
+    password: hashedPassword,
   });
 
   try {
@@ -53,12 +53,11 @@ const createUser = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: newUser._id,
       username: newUser.username,
-      email: newUser.email,
       address: newUser.address,
-      gender: newUser.gender,
-      ecoscore: newUser.ecoscore,
+      area: newUser.area,
       contact: newUser.contact,
       profileImage: newUser.profileImage,
+      email: newUser.email,
       isAdmin: newUser.isAdmin,
     });
   } catch (error) {
@@ -81,32 +80,37 @@ const createUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  // Check if user exist
+  // Check if user exists
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
 
-    // Generate token if the user is valid
     if (isPasswordValid) {
+      // Generate token if the user is valid
       const token = generateToken(res, existingUser._id);
 
       res.status(201).json({
         _id: existingUser._id,
         username: existingUser.username,
-        email: existingUser.email,
         address: existingUser.address,
-        gender: existingUser.gender,
-        ecoscore: existingUser.ecoscore,
+        area: existingUser.area,
         contact: existingUser.contact,
+        profileImage: existingUser.profileImage,
+        email: existingUser.email,
         isAdmin: existingUser.isAdmin,
-        token: token
+        token: token,
       });
-      return; // Exit the method after sending the response
+    } else {
+      // Send error response for incorrect password
+      res.status(401);
+      throw new Error("Invalid password.");
     }
+  } else {
+    // Send error response if user is not found
+    res.status(404);
+    throw new Error("User not found.");
   }
 });
 
@@ -157,12 +161,11 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       username: user.username,
-      email: user.email,
       address: user.address,
-      gender: user.gender,
-      ecoscore: user.ecoscore,
+      area: user.area,
       contact: user.contact,
       profileImage: user.profileImage,
+      email: user.email,
     });
   } else {
     res.status(404);
@@ -186,23 +189,36 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
+    // Update profile fields (other than password)
     user.username = req.body.username || user.username;
-    user.email = req.body.email || user.email;
-    user.gender = req.body.gender || user.gender;
     user.address = req.body.address || user.address;
+    user.area = req.body.area || user.area;
     user.contact = req.body.contact || user.contact;
     user.profileImage = req.body.profileImage || user.profileImage;
-    user.ecoscore = req.body.ecoscore || user.ecoscore;
-    
+
     let passwordChanged = false;
 
-    if (req.body.password) {
-      // Encypting the password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    if (req.body.oldPassword && req.body.password && req.body.confirmPassword) {
+      // Validate the current password
+      const isMatch = await bcrypt.compare(req.body.oldPassword, user.password);
 
-      user.password = hashedPassword;
-      passwordChanged = true;
+      if (isMatch) {
+        // Check if new password matches the confirm password
+        if (req.body.password === req.body.confirmPassword) {
+          // Encrypt and update the new password
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+          user.password = hashedPassword;
+          passwordChanged = true;
+        } else {
+          res.status(400);
+          throw new Error("New password and confirm password do not match.");
+        }
+      } else {
+        res.status(401);
+        throw new Error("Old password is incorrect.");
+      }
     }
 
     const updatedUser = await user.save();
@@ -210,12 +226,11 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     res.json({
       _id: updatedUser._id,
       username: updatedUser.username,
-      email: updatedUser.email,
       address: updatedUser.address,
-      gender: updatedUser.gender,
-      ecoscore: updatedUser.ecoscore,
+      area: updatedUser.area,
       contact: updatedUser.contact,
       profileImage: updatedUser.profileImage,
+      email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       message: passwordChanged
         ? "Password successfully changed!"
@@ -226,6 +241,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found!");
   }
 });
+
 
 /**
  * @route   DELETE /api/users/:id

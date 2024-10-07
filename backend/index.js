@@ -8,6 +8,7 @@ import cors from "cors"; // Import cors package
 // Utils
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import wmaRoutes from "./routes/wmaRoutes.js";
 import garbageRoutes from "./routes/garbageRoutes.js"; // fixed typo in garbageRoutes
 import truckRoutes from "./routes/truckRoutes.js"; // Import truckRoutes
 import scheduleRoutes from "./routes/scheduleRoutes.js";
@@ -40,6 +41,9 @@ app.get("/api", (req, res) => {
 
 // Users Route
 app.use("/api/users", userRoutes);
+
+// WMA Route
+app.use("/api/wmas", wmaRoutes);
 
 // Garbage Route
 app.use("/api/garbage", garbageRoutes);
