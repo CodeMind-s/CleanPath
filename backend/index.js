@@ -15,6 +15,7 @@ import garbageRoutes from "./routes/garbageRoutes.js"; // fixed typo in garbageR
 import scheduleRoutes from "./routes/scheduleRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import areaRoutes from "./routes/areaRoutes.js"; // Import areaRoutes
+import smartDeviceRoutes from "./routes/smartDeviceRoutes.js"; // Import smartDeviceRoutes
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -60,5 +61,8 @@ app.use("/api/schedule", scheduleRoutes);
 app.use("/api/transactions", transactionRoutes);
 // Area Route
 app.use("/api/areas", areaRoutes);
+
+// smarDevice Route
+app.use("/api/smartDevices", smartDeviceRoutes);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
