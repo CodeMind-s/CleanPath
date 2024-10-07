@@ -14,9 +14,8 @@ const router = express.Router();
 router
   .route("/")
   .post(authenticate, createGarbageRequest)
-  .get(authenticate, authorizeAdmin, getAllGarbageRequests);
+  .get(getAllGarbageRequests);
 
-router.route("/driver-garbage").get(getAllGarbageRequests);
 router.route("/garbage-requests").get(authenticate, getUserGarbageRequests);
 
 router
