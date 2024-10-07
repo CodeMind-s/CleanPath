@@ -2,21 +2,27 @@ import mongoose from "mongoose";
 
 const scheduleSchema = mongoose.Schema(
   {
-    truckId: {
+    wmaId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Truck", // Reference to the truck who made the request
+      ref: "WMA", // Reference to the Wast management authority who made the request
+    },
+    collectorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Collector" // Reference to the Collector who assing to the schedule
     },
     area: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Area" // Reference to the Area that schedule related to
+    },
+    date: {
+      type: Date,
     },
     time: {
       type: String,
       required: true,
-    },
-    date: {
-      type: Date,
     },
     longitude: {
       type: Number,
