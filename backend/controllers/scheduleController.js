@@ -5,25 +5,27 @@ import asyncHandler from "../middlewares/asyncHandler.js";
  * @route   POST /api/schedule
  * @desc    Create a new schedule request
  * @access  Private
- * @param   {Object} truckId - The id of the truck (required)
+ * @param   {Object} wmaId - The id of the wast management authority (required)
+ * @param   {Object} collectorId - The id of the collector (required)
  * @param   {String} area - The area of the collection (required)
  * @param   {String} time - the time of schedule (required)
  * @param   {String} date - the date of schedule (required)
  * @returns {Object} - A JSON object containing the newly created schedule data
  */
 const createSchedule = asyncHandler(async (req, res) => {
-  const { truckId, area, time, date } = req.body;
+  const { wmaId, collectorId, area, date, time} = req.body;
 
-  if (!truckId || !area || !time || !date ) {
+  if (!wmaId || !collectorId || !area || !date || !time ) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }
 
   const schedule = new Schedule({
-    truckId,
+    wmaId,
+    collectorId,
     area,
-    time,
     date,
+    time,
     longitude: null,
     latitude: null,
     status: 'Pending'
@@ -51,7 +53,7 @@ const getAllSchedules = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of schedules assingd to the truck
  */
 const getTruckSchedules = asyncHandler(async (req, res) => {
-  const schedule = await Schedule.find({ truckId: req.params.id })
+  const schedule = await Schedule.find({ collectorId: req.params.id })
 
   res.json(schedule);
 });
@@ -83,19 +85,19 @@ const getScheduleById = asyncHandler(async (req, res) => {
  * @returns {Object} - The updated garbage request
  */
 const updateSchedule = asyncHandler(async (req, res) => {
-  const { truckId, area, time, date, longitude, latitude, status} = req.body;
+  const { wmaId, collectorId, area, date, time, longitude, latitude, status} = req.body;
 
   const schedule = await Schedule.findById(req.params.id);
 
   if (schedule) {
-    schedule.truckId = truckId || schedule.truckId;
+    schedule.wmaId = wmaId || schedule.wmaId;
+    schedule.collectorId = collectorId || schedule.collectorId;
     schedule.area = area || schedule.area;
-    schedule.time = time || schedule.time;
     schedule.date = date || schedule.date;
+    schedule.time = time || schedule.time;
     schedule.longitude = longitude || schedule.longitude;
     schedule.latitude = latitude || schedule.latitude;
     schedule.status = status || schedule.status;
-    // schedule.collectionDate = collectionDate || new Date(); // Set to current system date if not provided
 
     const updatedSchedule = await schedule.save();
     res.json(updatedSchedule);
