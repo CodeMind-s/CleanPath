@@ -14,17 +14,9 @@ import User from "../models/userModel.js";
  * @returns {Object} - A JSON object containing the newly created garbage request data
  */
 const createGarbageRequest = asyncHandler(async (req, res) => {
-  const { area, longitude, latitude, typeOfGarbage, address, mobileNumber } =
-    req.body;
+  const { area, longitude, latitude, type } = req.body;
 
-  if (
-    !longitude ||
-    !latitude ||
-    !typeOfGarbage ||
-    !area ||
-    !address ||
-    !mobileNumber
-  ) {
+  if (!longitude || !latitude || !type || !area) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }
@@ -42,20 +34,19 @@ const createGarbageRequest = asyncHandler(async (req, res) => {
     user: req.user._id,
     longitude,
     latitude,
-    typeOfGarbage,
+    type,
     area,
-    address,
-    mobileNumber,
   });
 
   const createdGarbage = await garbage.save();
 
-  // Update user's ecoscore
-  const currentEcoscore = parseInt(user.ecoscore || "0", 10); // Parse as integer with fallback to 0
-  user.ecoscore = (currentEcoscore + 200).toString(); // Initialize ecoscore if it doesn't exist
-  await user.save();
-
-  res.status(201).json(createdGarbage);
+  try {
+    await user.save();
+    res.status(201).json(createdGarbage);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Error saving user or creating garbage request.");
+  }
 });
 
 /**
@@ -65,10 +56,7 @@ const createGarbageRequest = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of all garbage collection requests
  */
 const getAllGarbageRequests = asyncHandler(async (req, res) => {
-  const garbageRequests = await Garbage.find({}).populate(
-    "user",
-    "username email"
-  );
+  const garbageRequests = await Garbage.find({}).populate("user");
   res.json(garbageRequests);
 });
 
@@ -117,13 +105,12 @@ const getGarbageRequestById = asyncHandler(async (req, res) => {
  * @returns {Object} - The updated garbage request
  */
 const updateGarbageRequest = asyncHandler(async (req, res) => {
-  const { status, collectionDate } = req.body;
+  const { status } = req.body;
 
   const garbage = await Garbage.findById(req.params.id);
 
   if (garbage) {
     garbage.status = status || garbage.status;
-    garbage.collectionDate = collectionDate || new Date(); // Set to current system date if not provided
 
     const updatedGarbage = await garbage.save();
     res.json(updatedGarbage);

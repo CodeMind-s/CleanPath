@@ -12,6 +12,7 @@ import wmaRoutes from "./routes/wmaRoutes.js";
 import garbageRoutes from "./routes/garbageRoutes.js"; // fixed typo in garbageRoutes
 import truckRoutes from "./routes/truckRoutes.js"; // Import truckRoutes
 import scheduleRoutes from "./routes/scheduleRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -53,5 +54,8 @@ app.use("/api/truck", truckRoutes);
 
 // Schedule Route
 app.use("/api/schedule", scheduleRoutes);
+
+// Transaction Route
+app.use("/api/transactions", transactionRoutes);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));

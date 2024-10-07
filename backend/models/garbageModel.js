@@ -15,20 +15,12 @@ const garbageSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    typeOfGarbage: {
+    type: {
       type: String,
       required: true,
-      enum: ["Organic", "Recyclable", "Non-Recyclable", "Hazardous", "E-Waste"],
+      enum: ["Recyclable", "Non-Recyclable"],
     },
     area: {
-      type: String,
-      required: true,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    mobileNumber: {
       type: String,
       required: true,
     },
@@ -36,9 +28,6 @@ const garbageSchema = mongoose.Schema(
       type: String,
       enum: ["Pending", "Collected", "In Progress"],
       default: "Pending",
-    },
-    collectionDate: {
-      type: Date,
     },
   },
   { timestamps: true }
