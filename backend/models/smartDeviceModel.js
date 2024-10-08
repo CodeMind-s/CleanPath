@@ -7,7 +7,7 @@ const smartDeviceSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
-    gType: {
+    type: {
       type: String,
       required: true,
       enum: ["recyclable", "non-recyclable"], // Enumerated values
@@ -24,6 +24,11 @@ const smartDeviceSchema = mongoose.Schema(
     longitude: {
       type: Number,
       required: true,
+    },
+    status: {
+      type: String,
+      enum: ["Pending", "Collected", "In Progress"],
+      default: "Pending",
     },
   },
   { timestamps: true }

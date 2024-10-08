@@ -19,6 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 // MUI Icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -102,6 +103,11 @@ function UserDrawer({ children }) {
             icon: <DashboardIcon sx={iconStyle} color="" />,
             text: "Dashboard",
             link: "/user/dashboard",
+          },
+          {
+            icon: <EventAvailableIcon sx={iconStyle} />,
+            text: "Smart Device Requests",
+            link: "/user/smartDevice",
           },
           {
             icon: <DeleteSweepIcon sx={iconStyle} />,

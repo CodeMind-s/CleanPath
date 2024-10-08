@@ -10,13 +10,13 @@ import Area from "../models/areaModel.js";
  * @param   {String} area - The area ID where the device is located (required)
  * @param   {Number} longitude - The longitude of the device's location (required)
  * @param   {Number} latitude - The latitude of the device's location (required)
- * @param   {String} gType - The garbage type the device monitors (required)
+ * @param   {String} type - The garbage type the device monitors (required)
  * @returns {Object} - A JSON object containing the newly created smart device data
  */
 const createSmartDevice = asyncHandler(async (req, res) => {
-  const { area, longitude, latitude, gType } = req.body;
+  const { area, longitude, latitude, type } = req.body;
 
-  if (!longitude || !latitude || !gType || !area) {
+  if (!longitude || !latitude || !type || !area) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }
@@ -40,7 +40,7 @@ const createSmartDevice = asyncHandler(async (req, res) => {
     userId: req.user._id,
     longitude,
     latitude,
-    gType,
+    type,
     area,
   });
 
@@ -98,18 +98,18 @@ const getSmartDeviceById = asyncHandler(async (req, res) => {
  * @route   PUT /api/smartDevices/:id
  * @desc    Update a smart device's details
  * @access  Private/Admin
- * @param   {String} gType - The new garbage type monitored by the device
+ * @param   {String} type - The new garbage type monitored by the device
  * @param   {Number} latitude - The updated latitude of the device
  * @param   {Number} longitude - The updated longitude of the device
  * @returns {Object} - The updated smart device object
  */
 const updateSmartDevice = asyncHandler(async (req, res) => {
-  const { gType, latitude, longitude } = req.body;
+  const { type, latitude, longitude } = req.body;
 
   const device = await SmartDevice.findById(req.params.id);
 
   if (device) {
-    device.gType = gType || device.gType;
+    device.type = type || device.type;
     device.latitude = latitude || device.latitude;
     device.longitude = longitude || device.longitude;
 

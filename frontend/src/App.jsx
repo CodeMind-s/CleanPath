@@ -9,6 +9,7 @@ import UserGarbageRequest from "./pages/client/garbage/UserGarbageRequest";
 import UserDashboard from "./pages/client/dashboard/UserDashboard";
 import UserTransaction from "./pages/client/transaction/UserTransaction";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
+import UserSmartDeviceRequest from "./pages/client/smartDevice/UserSmartDeviceRequest";
 
 function App() {
   return (
@@ -25,6 +26,11 @@ function App() {
             exact
             path="/user/my-transaction"
             Component={UserTransaction}
+          />
+          <Route
+            exact
+            path="/user/smartDevice"
+            Component={UserSmartDeviceRequest}
           />
 
           {/* Admin routes */}
