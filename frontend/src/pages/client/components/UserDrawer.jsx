@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../../api/userApi";
 import logo from "../../../assets/logo.png";
@@ -19,11 +19,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 // MUI Icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import GroupIcon from "@mui/icons-material/Group";
+import PaidIcon from "@mui/icons-material/Paid";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // Custom Components
@@ -39,7 +38,7 @@ const listItemTextStyle = {
   },
 };
 
-function AdminDrawer({ children }) {
+function UserDrawer({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const navigate = useNavigate();
@@ -55,16 +54,32 @@ function AdminDrawer({ children }) {
     }
   };
 
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const userProfile = await UserApi.getCurrentUserDetails();
+        setProfile(userProfile);
+        console.log(`Profile =>`, userProfile);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const handleLogout = async () => {
     try {
       const response = await AuthService.logoutCurrentUser();
       // console.log("Logout status: ", response);
 
-      toast.success("Logged out successfully!", {
+      toast.success("Logout successful", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
-        theme: "colored",
       });
       // Redirect to dashboard or home page
       setTimeout(() => {
@@ -78,9 +93,7 @@ function AdminDrawer({ children }) {
   const drawer = (
     <div>
       <Toolbar>
-        <Link to="/admin/dashboard">
-          <img src={logo} alt="logo" style={{ width: 150 }} />
-        </Link>
+        <img src={logo} alt="logo" style={{ width: 150 }} />
       </Toolbar>
       <Divider />
       <List>
@@ -88,32 +101,22 @@ function AdminDrawer({ children }) {
           {
             icon: <DashboardIcon sx={iconStyle} color="" />,
             text: "Dashboard",
-            link: "/admin",
+            link: "/user/dashboard",
           },
           {
             icon: <DeleteSweepIcon sx={iconStyle} />,
-            text: "Garbage",
-            link: "/admin/garbage",
+            text: "Garbage Requests",
+            link: "/user/my-garbage",
           },
           {
-            icon: <GroupIcon sx={iconStyle} />,
-            text: "Users",
-            link: "/admin/users",
-          },
-          {
-            icon: <LocalShippingIcon sx={iconStyle} />,
-            text: "Truck",
-            link: "/admin/trucks",
-          },
-          {
-            icon: <EventAvailableIcon sx={iconStyle} />,
-            text: "Schedule",
-            link: "/admin/schedule",
-          },
-          {
-            icon: <SupportAgentIcon sx={iconStyle} />,
+            icon: <PaidIcon sx={iconStyle} />,
             text: "Transactions",
-            link: "/admin/transactions",
+            link: "/user/my-transaction",
+          },
+          {
+            icon: <AccountCircleIcon sx={iconStyle} />,
+            text: "Profile",
+            link: "/user/profile",
           },
           {
             icon: <LogoutIcon sx={iconStyle} />,
@@ -132,8 +135,8 @@ function AdminDrawer({ children }) {
               }
             }}
           >
-            <ListItemButton>
-              <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemButton sx={{ paddingLeft: 2 }}>
+              <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
               <ListItemText sx={listItemTextStyle} primary={item.text} />
             </ListItemButton>
           </ListItem>
@@ -150,7 +153,7 @@ function AdminDrawer({ children }) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          bgcolor: "#f5fadf",
+          bgcolor: "#f7f7f7",
           boxShadow: "none",
         }}
       >
@@ -212,11 +215,11 @@ function AdminDrawer({ children }) {
         }}
       >
         <Toolbar />
-        <div className="usr-drawer-content">{children}</div>
+        <div className="usr-drawer-content ">{children}</div>
       </Box>
       <ToastContainer />
     </Box>
   );
 }
 
-export default AdminDrawer;
+export default UserDrawer;

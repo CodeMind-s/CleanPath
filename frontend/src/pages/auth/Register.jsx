@@ -1,20 +1,16 @@
 import React from "react";
+import logo from "../../assets/logo.png";
 
 const Register = () => {
   return (
     <div>
-      <section className="bg-gray-50 :bg-gray-900">
+      <section className="bg-[#f5fadf] :bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 :text-white"
           >
-            <img
-              className="w-8 h-8 mr-2"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-              alt="logo"
-            />
-            Flowbite
+            <img className="w-44 mr-2" src={logo} alt="logo" />
           </a>
           <div className="w-full bg-white rounded-lg shadow :border md:mt-0 sm:max-w-md xl:p-0 :bg-gray-800 :border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -97,7 +93,7 @@ const Register = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center :bg-blue-600 :hover:bg-blue-700 :focus:ring-blue-800"
+                  className="w-full text-white bg-[#64903c]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center :bg-blue-600 :hover:bg-blue-700 :focus:ring-blue-800"
                 >
                   Create an account
                 </button>

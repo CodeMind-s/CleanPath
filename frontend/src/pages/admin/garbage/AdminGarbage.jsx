@@ -19,6 +19,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { getAllAreas } from "../../../api/areaApi";
 
 const AdminGarbage = () => {
   const [garbages, setGarbages] = useState([]);
@@ -28,7 +29,19 @@ const AdminGarbage = () => {
   const [loader, setLoader] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [areaFilter, setAreaFilter] = useState("");
+  const [areas, setAreas] = useState([]);
   const navigate = useNavigate();
+
+  const fetchAllAreas = async () => {
+    try {
+      const res = await getAllAreas();
+      setAreas(res);
+    } catch (error) {
+      alert(error.message);
+      console.error("Error fetching areas: ", error.message);
+    }
+  };
 
   const fetchAllGarbages = async () => {
     try {
@@ -43,11 +56,8 @@ const AdminGarbage = () => {
 
   useEffect(() => {
     fetchAllGarbages();
+    fetchAllAreas();
   }, []);
-
-  useEffect(() => {
-    filterGarbages();
-  }, [statusFilter, typeFilter, garbages]);
 
   const filterGarbages = () => {
     let filtered = garbages;
@@ -55,12 +65,22 @@ const AdminGarbage = () => {
       filtered = filtered.filter((garbage) => garbage.status === statusFilter);
     }
     if (typeFilter) {
+      filtered = filtered.filter((garbage) => garbage.type === typeFilter);
+    }
+
+    if (areaFilter !== "") {
       filtered = filtered.filter(
-        (garbage) => garbage.typeOfGarbage === typeFilter
+        (garbage) => garbage.area?.name === areaFilter
       );
     }
+
+    // console.log(`areaFilter => `, areaFilter);
     setFilteredGarbages(filtered);
   };
+
+  useEffect(() => {
+    filterGarbages();
+  }, [statusFilter, typeFilter, areaFilter, garbages]);
 
   const handleClickOpen = (id) => {
     setSelectedGarbageId(id);
@@ -131,7 +151,7 @@ const AdminGarbage = () => {
   const downloadPDF = (garbageData) => {
     const doc = new jsPDF();
     const imgLogo = new Image();
-    imgLogo.src = "../src/assets/GarboGo.png"; // Add your logo path
+    imgLogo.src = "../src/assets/logo.png"; // Add your logo path
 
     // console.log("Image path: ", imgLogo.src);
     imgLogo.onload = () => {
@@ -140,7 +160,7 @@ const AdminGarbage = () => {
       doc.setFont("helvetica", "bold");
       doc.setTextColor("48752c"); // Change color if needed
       doc.setFontSize(16);
-      doc.text("GarboGo Waste Management System", 95, 18); // Title in the header
+      doc.text("CleanPath Waste Management System", 95, 18); // Title in the header
 
       // Title and Date
       doc.setFont("helvetica", "normal");
@@ -244,6 +264,22 @@ const AdminGarbage = () => {
                 <MenuItem value="Non-Recyclable">Non-Recyclable</MenuItem>
               </Select>
             </FormControl>
+            <FormControl className="w-44">
+              <InputLabel id="area-filter-label">Filter By Area</InputLabel>
+              <Select
+                labelId="area-filter-label"
+                value={areaFilter}
+                label="Area"
+                onChange={(e) => setAreaFilter(e.target.value)}
+              >
+                <MenuItem value={""}>All Areas</MenuItem>
+                {areas.map((area) => (
+                  <MenuItem key={area._id} value={area.name}>
+                    {area.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
           <Button
             variant="contained"
@@ -326,7 +362,9 @@ const AdminGarbage = () => {
                         ? garbage.user.username
                         : "No user assigned"}
                     </th>
-                    <td className="px-5 py-4">{garbage.user.contact}</td>
+                    <td className="px-5 py-4">
+                      {garbage.user ? garbage.user.contact : ""}
+                    </td>
                     <td className="px-3 py-4 capitalize">
                       <span
                         className={`uppercase font-semibold text-[12px] px-2.5 py-0.5 rounded ${getTypeClassName(
@@ -336,8 +374,22 @@ const AdminGarbage = () => {
                         {garbage.type}
                       </span>
                     </td>
-                    <td className="px-5 py-4">{garbage.area}</td>
-                    <td className="px-5 py-4">{garbage.user.address}</td>
+                    <td className="px-5 py-4">
+                      {garbage.area ? garbage.area.name : ""}
+                      &nbsp;
+                      <span
+                        className={`uppercase font-semibold text-[12px] p-1.5 rounded-full ${
+                          garbage.area.type === "weightBased"
+                            ? `bg-blue-200 text-blue-600`
+                            : "bg-green-200 text-green-600"
+                        }`}
+                      >
+                        {garbage.area.type === "weightBased" ? "W" : "F"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      {garbage.user ? garbage.user.address : ""}
+                    </td>
                     <td className="px-5 py-4">
                       {" "}
                       {new Date(garbage.createdAt).toLocaleString()}

@@ -14,7 +14,7 @@ import User from "../models/userModel.js";
  * @returns {Object} - A JSON object containing the newly created garbage request data
  */
 const createGarbageRequest = asyncHandler(async (req, res) => {
-  const { area, longitude, latitude, type } = req.body;
+  const { area, address, longitude, latitude, type, weight } = req.body;
 
   if (!longitude || !latitude || !type || !area) {
     res.status(400);
@@ -32,10 +32,12 @@ const createGarbageRequest = asyncHandler(async (req, res) => {
   // Create the garbage request
   const garbage = new Garbage({
     user: req.user._id,
+    address,
     longitude,
     latitude,
     type,
     area,
+    weight,
   });
 
   const createdGarbage = await garbage.save();
@@ -56,7 +58,9 @@ const createGarbageRequest = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of all garbage collection requests
  */
 const getAllGarbageRequests = asyncHandler(async (req, res) => {
-  const garbageRequests = await Garbage.find({}).populate("user");
+  const garbageRequests = await Garbage.find({})
+    .populate("user", "username email contact address")
+    .populate("area", "name type rate");
   res.json(garbageRequests);
 });
 
@@ -68,10 +72,9 @@ const getAllGarbageRequests = asyncHandler(async (req, res) => {
  */
 const getUserGarbageRequests = asyncHandler(async (req, res) => {
   // Find garbage requests where the user ID matches the logged-in user
-  const garbageRequests = await Garbage.find({ user: req.user._id }).populate(
-    "user",
-    "username email"
-  );
+  const garbageRequests = await Garbage.find({ user: req.user._id })
+    .populate("user", "username email contact address")
+    .populate("area", "name type rate");
 
   res.json(garbageRequests);
 });
