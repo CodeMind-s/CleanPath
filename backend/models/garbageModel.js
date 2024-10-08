@@ -7,6 +7,10 @@ const garbageSchema = mongoose.Schema(
       required: true,
       ref: "User", // Reference to the User who made the request
     },
+    address: {
+      type: String,
+      required: true,
+    },
     longitude: {
       type: Number,
       required: true,
@@ -21,8 +25,13 @@ const garbageSchema = mongoose.Schema(
       enum: ["Recyclable", "Non-Recyclable"],
     },
     area: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Area", // Reference to the Area where the garbage will be collected
+    },
+    weight: {
+      type: Number,
+      default: 0,
     },
     status: {
       type: String,

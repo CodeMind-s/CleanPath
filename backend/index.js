@@ -58,7 +58,10 @@ app.use("/api/schedule", scheduleRoutes);
 
 // Transaction Route
 app.use("/api/transactions", transactionRoutes);
+
 // Area Route
 app.use("/api/areas", areaRoutes);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
+
+export default app;
