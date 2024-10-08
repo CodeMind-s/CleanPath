@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 // @desc    Create a new transaction
 // @route   POST /api/transactions
 const createTransaction = asyncHandler(async (req, res) => {
-  const { description, isRefund, amount } = req.body;
+  const { description, isRefund, isPaid, amount } = req.body;
 
   // Find the user
   const user = await User.findById(req.user._id);
@@ -18,6 +18,7 @@ const createTransaction = asyncHandler(async (req, res) => {
   const transaction = new Transaction({
     user: req.user._id,
     description,
+    isPaid,
     isRefund,
     amount,
   });
@@ -73,13 +74,11 @@ const getTransactionsByUser = asyncHandler(async (req, res) => {
 // @desc    Update a transaction
 // @route   PUT /api/transactions/:id
 const updateTransaction = asyncHandler(async (req, res) => {
-  const { isRefund, isPaid } = req.body;
+  const { isPaid } = req.body;
 
   const transaction = await Transaction.findById(req.params.id);
 
   if (transaction) {
-    transaction.isRefund =
-      isRefund !== undefined ? isRefund : transaction.isRefund;
     transaction.isPaid = isPaid !== undefined ? isPaid : transaction.isPaid;
 
     const updatedTransaction = await transaction.save();

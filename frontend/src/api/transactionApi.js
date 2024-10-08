@@ -43,12 +43,11 @@ const getTransactionById = async (id) => {
   }
 };
 
-const updateTransaction = async (transaction, id) => {
+const updateTransaction = async (id) => {
   try {
-    const updatedTransaction = await new ApiHelper().put(
-      `transactions/${id}`,
-      transaction
-    );
+    const updatedTransaction = await new ApiHelper().put(`transactions/${id}`, {
+      isPaid: true,
+    });
     return updatedTransaction;
   } catch (error) {
     console.error("Error updating transaction:", error.message);
