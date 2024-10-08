@@ -57,12 +57,15 @@ export default function Garbage_Add_Form() {
       latitude,
       longitude,
       type,
-      weight: type === "Recyclable" ? weight : 0, // Set weight based on type
+      weight: parseFloat(
+        areas.find((a) => a._id === area)?.type === "weightBased" ? weight : 0
+      ), // Set weight based on area type
     };
 
     const newTransaction = {
       description: `Garbage Disposal Request - ${type}`,
       isRefund: type === "Recyclable" ? true : false,
+      isPaid: type === "Recyclable" ? true : false,
       amount:
         areas.find((a) => a._id === area)?.type === "weightBased"
           ? weight * areas.find((a) => a._id === area)?.rate
@@ -88,8 +91,8 @@ export default function Garbage_Add_Form() {
 
       setIsSubmit(true);
       setTimeout(() => {
-        setIsOpen(false);
-        window.location.reload();
+        // setIsOpen(false);
+        // window.location.reload();
       }, 3000);
     } catch (error) {
       console.error("Error submitting garbage entry:", error);
