@@ -13,15 +13,20 @@ const router = express.Router();
 
 router
   .route("/")
-  .post(authenticate, authorizeAdmin, createSchedule)
-  .get(authenticate, getAllSchedules);
+  .post(createSchedule)
+  .get(getAllSchedules);
+  // .post(authenticate, authorizeAdmin, createSchedule)
+  // .get(authenticate, getAllSchedules);
 
-router.route("/truck-schedules/:id").get( getTruckSchedules);
+router.route("/collector-schedules/:id").get(getTruckSchedules);
 
 router
   .route("/:id")
-  .get(authenticate, getScheduleById)
-  .put(authenticate, authorizeAdmin, updateSchedule)
-  .delete(authenticate, authorizeAdmin, deleteSchedule);
+  .get(getScheduleById)
+  .put(updateSchedule)
+  .delete(deleteSchedule);
+  // .get(authenticate, getScheduleById)
+  // .put(authenticate, authorizeAdmin, updateSchedule)
+  // .delete(authenticate, authorizeAdmin, deleteSchedule);
 
 export default router;
