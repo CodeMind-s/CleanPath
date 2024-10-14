@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  createSmartDeviceRequest,
   deleteSmartDeviceRequest,
   getUserAllSmartDeviceRequests,
 } from "../../../api/smartDeviceApi";
@@ -63,8 +62,8 @@ const UserSmartDeviceRequest = () => {
         await deleteSmartDeviceRequest(selectedDeviceId);
 
         // Refresh the smart device list after successful deletion
-        // const updatedSmartDevices = await getUserAllSmartDeviceRequests();
-        // setSmartDevices(updatedSmartDevices);
+        const updatedSmartDevices = await getUserAllSmartDeviceRequests();
+        setSmartDevices(updatedSmartDevices);
 
         handleClose();
         toast.success("Smart Device Request Deleted Successfully!", {

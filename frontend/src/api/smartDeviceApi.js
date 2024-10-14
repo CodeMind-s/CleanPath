@@ -48,7 +48,7 @@ const updateSmartDeviceRequest = async (status, id) => {
 
 const deleteSmartDeviceRequest = async (id) => {
   try {
-    const deletedRequest = await new API().delete(`device/${id}`);
+    const deletedRequest = await new API().delete(`smartDevices/${id}`);
     return deletedRequest.data;
   } catch (error) {
     console.error("Error deleting smart device request:", error.message);
