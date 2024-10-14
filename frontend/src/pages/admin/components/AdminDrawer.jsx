@@ -21,7 +21,7 @@ import Toolbar from "@mui/material/Toolbar";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import PaidIcon from "@mui/icons-material/Paid";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -88,7 +88,7 @@ function AdminDrawer({ children }) {
           {
             icon: <DashboardIcon sx={iconStyle} color="" />,
             text: "Dashboard",
-            link: "/admin",
+            link: "/admin/dashboard",
           },
           {
             icon: <DeleteSweepIcon sx={iconStyle} />,
@@ -111,7 +111,7 @@ function AdminDrawer({ children }) {
             link: "/admin/schedule",
           },
           {
-            icon: <SupportAgentIcon sx={iconStyle} />,
+            icon: <PaidIcon sx={iconStyle} />,
             text: "Transactions",
             link: "/admin/transactions",
           },
