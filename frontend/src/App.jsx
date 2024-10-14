@@ -9,6 +9,7 @@ import UserGarbageRequest from "./pages/client/garbage/UserGarbageRequest";
 import UserDashboard from "./pages/client/dashboard/UserDashboard";
 import UserTransaction from "./pages/client/transaction/UserTransaction";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
+import AdminGarbageUpdate from "./pages/admin/garbage/AdminGarbageUpdate";
 
 function App() {
   return (
@@ -30,6 +31,11 @@ function App() {
           {/* Admin routes */}
           <Route exact path="/admin/dashboard" Component={AdminDashboard} />
           <Route exact path="/admin/garbage" Component={AdminGarbage} />
+          <Route
+            exact
+            path="/admin/garbage/update"
+            Component={AdminGarbageUpdate}
+          />
           <Route
             exact
             path="/admin/transactions"
