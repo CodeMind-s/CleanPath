@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Divider } from "@mui/material";
 import { createGarbage } from "../../../api/garbageApi";
 import { getAllAreas } from "../../../api/areaApi";
-import { createTransaction } from "../../../api/transactionApi";
+// import { createTransaction } from "../../../api/transactionApi";
 
 export default function Garbage_Add_Form() {
   const [areas, setAreas] = useState([]);
@@ -57,23 +57,26 @@ export default function Garbage_Add_Form() {
       latitude,
       longitude,
       type,
-      weight: type === "Recyclable" ? weight : 0, // Set weight based on type
+      weight: parseFloat(
+        areas.find((a) => a._id === area)?.type === "weightBased" ? weight : 0
+      ), // Set weight based on area type
     };
 
-    const newTransaction = {
-      description: `Garbage Disposal Request - ${type}`,
-      isRefund: type === "Recyclable" ? true : false,
-      amount:
-        areas.find((a) => a._id === area)?.type === "weightBased"
-          ? weight * areas.find((a) => a._id === area)?.rate
-          : areas.find((a) => a._id === area)?.rate, // Calculate amount based on weight and area rate
-    };
+    // const newTransaction = {
+    //   description: `Garbage Disposal Request - ${type}`,
+    //   isRefund: type === "Recyclable" ? true : false,
+    //   isPaid: type === "Recyclable" ? true : false,
+    //   amount:
+    //     areas.find((a) => a._id === area)?.type === "weightBased"
+    //       ? weight * areas.find((a) => a._id === area)?.rate
+    //       : areas.find((a) => a._id === area)?.rate, // Calculate amount based on weight and area rate
+    // };
 
     try {
       // console.log(`newGarbageEntry => `, newGarbageEntry);
       // console.log(`newTransaction => `, newTransaction);
       await createGarbage(newGarbageEntry);
-      await createTransaction(newTransaction);
+      // await createTransaction(newTransaction);
 
       toast.success("Garbage entry submitted successfully!", {
         position: "bottom-right",
