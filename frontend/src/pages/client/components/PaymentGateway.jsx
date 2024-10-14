@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import CloseIcon from "@mui/icons-material/Close";
+import PaidIcon from "@mui/icons-material/Paid";
 
 const PaymentGateway = ({ onSubmitPayment, onClose }) => {
   const [name, setName] = useState("");
@@ -21,7 +24,6 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
     const currentYear = currentDate.getFullYear() % 100; // Last 2 digits of the current year
     const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
 
-    // Ensure the year is greater than the current year, or the same year but future month
     if (year > currentYear || (year === currentYear && month >= currentMonth)) {
       return true;
     }
@@ -35,21 +37,17 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const newErrors = {};
 
-    // Validate card number
     if (!validateCardNumber(cardNumber)) {
       newErrors.cardNumber = "Card number must be exactly 16 digits.";
     }
 
-    // Validate expiry date
     if (!validateExpiry(expiry)) {
       newErrors.expiry =
         "Expiry date must be in MM/YY format and be in the future.";
     }
 
-    // Validate CVC
     if (!validateCVC(cvc)) {
       newErrors.cvc = "CVC must be exactly 3 digits.";
     }
@@ -59,104 +57,140 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
       return;
     }
 
-    // Clear errors and submit form
     setErrors({});
     const paymentData = { name, cardNumber, expiry, cvc };
     onSubmitPayment(paymentData);
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Payment</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 ease-in-out">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full transform transition-transform duration-300 ease-in-out">
+        <div className="flex items-center justify-between mb-7">
+          <div className="flex items-center gap-2">
+            <CreditCardIcon fontSize="large" className="text-blue-500" />
+            <h2 className="text-xl font-semibold text-gray-800 text-left">
+              Payment Details
+            </h2>
+          </div>
+          <div onClick={onClose} className="cursor-pointer">
+            <CloseIcon />
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-5">
+            <label className="block text-gray-600 text-sm mb-1 font-medium">
               Name on Card
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
               placeholder="John Doe"
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-5">
+            <label className="block text-gray-600 text-sm mb-1 font-medium">
               Card Number
             </label>
             <input
               type="text"
-              value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
-              className={`w-full p-2 border ${
+              value={cardNumber.replace(/(\d{4})(?=\d)/g, "$1 ")}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                if (value.length <= 16) {
+                  setCardNumber(value);
+                }
+              }}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
                 errors.cardNumber ? "border-red-500" : "border-gray-300"
-              } rounded`}
+              }`}
               placeholder="1234 5678 9012 3456"
-              maxLength="16"
               required
             />
             {errors.cardNumber && (
-              <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>
+              <p className="text-red-500 text-xs mt-2">{errors.cardNumber}</p>
             )}
           </div>
-          <div className="flex space-x-4 mb-4">
+          <div className="flex space-x-4 mb-5">
             <div className="w-1/2">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-600 text-sm mb-1 font-medium">
                 Expiry Date
               </label>
               <input
                 type="text"
                 value={expiry}
-                onChange={(e) => setExpiry(e.target.value)}
-                className={`w-full p-2 border ${
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length >= 2) {
+                    value = value.slice(0, 2) + "/" + value.slice(2);
+                  }
+                  if (value.length <= 5) {
+                    setExpiry(value);
+                  }
+                }}
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
                   errors.expiry ? "border-red-500" : "border-gray-300"
-                } rounded`}
+                }`}
                 placeholder="MM/YY"
                 required
               />
               {errors.expiry && (
-                <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>
+                <p className="text-red-500 text-xs mt-2">{errors.expiry}</p>
               )}
             </div>
+
             <div className="w-1/2">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-600 text-sm mb-1 font-medium">
                 CVC
               </label>
               <input
                 type="number"
                 value={cvc}
-                onChange={(e) => setCvc(e.target.value)}
-                className={`w-full p-2 border ${
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+                  if (value.length <= 3) {
+                    setCvc(value);
+                  }
+                }}
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
                   errors.cvc ? "border-red-500" : "border-gray-300"
-                } rounded`}
+                }`}
                 placeholder="123"
-                maxLength="3"
                 required
               />
               {errors.cvc && (
-                <p className="text-red-500 text-xs mt-1">{errors.cvc}</p>
+                <p className="text-red-500 text-xs mt-2">{errors.cvc}</p>
               )}
             </div>
           </div>
-          <div className="flex justify-between items-center">
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-red-500 underline"
-            >
-              Cancel
-            </button>
+          <div className="mb-5">
+            <div className="flex items-center">
+              <input type="checkbox" id="agree" className="mr-2" required />
+              <label htmlFor="agree" className="text-gray-600 text-sm">
+                I agree to the terms and conditions of the card payment.
+              </label>
+            </div>
+          </div>
+          <div className="flex w-full justify-center items-center mt-6">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold w-[100%] p-2 rounded-md transition"
             >
               Submit Payment
             </button>
           </div>
         </form>
+        <p className="mt-6 flex justify-center font-light text-sm text-gray-400">
+          powered by&nbsp;
+          <div className="flex items-center gap-1 cursor-pointer">
+            <PaidIcon fontSize="small" className="text-gray-500" />
+            <span className="underline text-gray-700 font-bold">
+              CleanPathPay
+            </span>
+          </div>
+        </p>
       </div>
     </div>
   );
