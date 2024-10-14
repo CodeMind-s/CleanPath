@@ -3,12 +3,30 @@ import User from "../models/userModel.js";
 import WMA from "../models/wmaModel.js";
 import asyncHandler from "./asyncHandler.js";
 
+/**
+ * Middleware to authenticate a user based on JWT token stored in cookies.
+ *
+ * This middleware reads the JWT token from the 'jwt' cookie, verifies it, and attaches the user information
+ * to the request object if the token is valid. If the token is missing or invalid, it responds with a 401 status code.
+ *
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ *
+ * @throws {Error} If the token is missing or invalid.
+ */
 const authenticate = asyncHandler(async (req, res, next) => {
   let token;
 
-  // Read JWT from 'jwt' cookie
-  token = req.cookies.jwt;
-  // console.log(`token from authMiddleware => `, token);
+  // Check JWT in 'Authorization' header or 'jwt' cookie
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1]; // Extract token from Authorization header
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt; // Extract token from cookie
+  }
 
   if (token) {
     try {
@@ -25,6 +43,19 @@ const authenticate = asyncHandler(async (req, res, next) => {
   }
 });
 
+/**
+ * Middleware to authenticate WMA (Web Management Application) users using JWT.
+ *
+ * This middleware reads the JWT from the 'jwt_wma' cookie, verifies it, and attaches
+ * the authenticated WMA user to the request object. If the token is invalid or missing,
+ * it responds with a 401 status and an appropriate error message.
+ *
+ * @function authenticateWMA
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @throws Will throw an error if the token is invalid or missing
+ */
 const authenticateWMA = asyncHandler(async (req, res, next) => {
   let token;
 
