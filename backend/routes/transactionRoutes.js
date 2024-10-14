@@ -10,18 +10,22 @@ import {
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
+// Initialize the router
 const router = express.Router();
 
+// Route for creating a new transaction and getting all transactions
 router
   .route("/")
-  .post(authenticate, createTransaction)
-  .get(authenticate, authorizeAdmin, getAllTransactions);
+  .post(createTransaction) // Create a new transaction
+  .get(authenticate, authorizeAdmin, getAllTransactions); // Get all transactions (admin only)
 
-router.route("/user").get(authenticate, getTransactionsByUser);
+// Route for getting transactions by user
+router.route("/user").get(authenticate, getTransactionsByUser); // Get transactions for the authenticated user
 
+// Route for getting, and updating a transaction by ID
 router
   .route("/:id")
-  .get(authenticate, getTransactionById)
-  .put(authenticate, updateTransaction);
+  .get(authenticate, getTransactionById) // Get a transaction by ID
+  .put(authenticate, updateTransaction); // Update a transaction by ID
 
 export default router;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ResponsiveDrawer from "../components/ResposiveDrawer";
+import ResponsiveDrawer from "../components/AdminDrawer";
 import { updateGarbage } from "../../../api/garbageApi"; // Update the path accordingly
 import { ToastContainer, toast } from "react-toastify";
-import GarbageDisplayMap from "./GarbageDisplayMap";
+import { createTransaction } from "../../../api/transactionApi";
 
 const AdminGarbageUpdate = () => {
   const location = useLocation();
@@ -15,8 +15,42 @@ const AdminGarbageUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Prepare transaction data if status is being updated to "In Progress"
+    if (status === "In Progress") {
+      const areaType = location.state.garbage.area.type;
+      const garbageWeight = location.state.garbage.weight;
+      const rate = location.state.garbage.area.rate;
+
+      const newTransaction = {
+        userID: location.state.garbage.user._id,
+        description: `Garbage Collection In-Progress - ${location.state.garbage.type}`,
+        isRefund: location.state.garbage.type === "Recyclable" ? true : false,
+        isPaid: location.state.garbage.type === "Recyclable" ? true : false,
+        amount: areaType === "weightBased" ? garbageWeight * rate : rate, // Calculate amount
+      };
+
+      try {
+        // console.log(`newTransaction => `, newTransaction);
+        await createTransaction(newTransaction); // Create the transaction
+        toast.success("Transaction created successfully!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } catch (error) {
+        console.error("Error creating transaction:", error);
+        toast.error("Failed to create transaction.");
+      }
+    }
+
     try {
-      await updateGarbage(status, location.state.garbage._id);
+      await updateGarbage(status, location.state.garbage._id); // Update garbage status
       toast.success("Garbage status updated successfully!", {
         position: "bottom-right",
         autoClose: 5000,
@@ -32,19 +66,20 @@ const AdminGarbageUpdate = () => {
       }, 2000);
     } catch (error) {
       console.error("Error updating garbage status:", error.message);
+      toast.error("Failed to update garbage status.");
     }
   };
 
   return (
     <ResponsiveDrawer>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+      <div className="grid grid-cols-1 lg:grid-cols- gap-8 p-6">
         {/* Garbage Display Map */}
         <div className="w-full">
-          <GarbageDisplayMap
+          {/* <GarbageDisplayMap
             garbagelat={lat}
             garbagelon={lon}
             garbagetype={type}
-          />
+          /> */}
         </div>
 
         {/* Form Section */}
@@ -69,7 +104,7 @@ const AdminGarbageUpdate = () => {
                 </label>
                 <input
                   type="text"
-                  value={location.state.garbage.typeOfGarbage}
+                  value={location.state.garbage.type}
                   readOnly
                   className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
                 />
@@ -80,7 +115,7 @@ const AdminGarbageUpdate = () => {
                 <label className="block text-gray-600 font-medium">Area</label>
                 <input
                   type="text"
-                  value={location.state.garbage.area}
+                  value={location.state.garbage.area.name}
                   readOnly
                   className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
                 />
@@ -104,7 +139,7 @@ const AdminGarbageUpdate = () => {
                 </label>
                 <input
                   type="text"
-                  value={location.state.garbage.mobileNumber}
+                  value={location.state.garbage.user.contact}
                   readOnly
                   className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
                 />
