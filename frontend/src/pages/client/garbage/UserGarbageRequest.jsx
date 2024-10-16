@@ -142,9 +142,6 @@ const UserGarbageRequest = () => {
             </caption>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 :bg-gray-700 :text-gray-400">
               <tr>
-                {/* <th scope="col" className="px-6 py-3">
-                Email
-              </th> */}
                 <th scope="col" className="px-6 py-3">
                   Area
                 </th>
@@ -166,7 +163,6 @@ const UserGarbageRequest = () => {
                 <th scope="col" className="px-6 py-3">
                   Status
                 </th>
-
                 <th scope="col" className="px-5 py-3">
                   <span className="sr-only"></span>
                 </th>
@@ -185,24 +181,20 @@ const UserGarbageRequest = () => {
                       <td className="px-6 py-4">
                         {garbage.area.type === "weightBased"
                           ? "Weight"
-                          : "Flat"}
+                          : "Flat"}{" "}
+                        &nbsp;
+                        <span className="bg-gray-500 py-1 px-2 text-[12px] rounded-xl font-semibold text-white">
+                          LKR&nbsp;{garbage.area.rate}
+                        </span>
                       </td>
-                      <td
-                        className={`px-5 py-4 font-semibold ${
-                          garbage.type === "Recyclable"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {garbage.type === "Recyclable" ? (
-                          <ArrowDropUpIcon />
-                        ) : (
-                          <ArrowDropDownIcon />
-                        )}
+                      <td className={`px-5 py-4 font-semibold text-green-600 `}>
                         LKR&nbsp;
                         {garbage.weight
-                          ? garbage.weight * garbage.area.rate
-                          : garbage.area.rate}
+                          ? garbage.weight *
+                            garbage.area.rate *
+                            (garbage.type === "Recyclable" ? 0.9 : 1)
+                          : garbage.area.rate *
+                            (garbage.type === "Recyclable" ? 0.9 : 1)}
                         .00
                       </td>
                       <td className="px-6 py-4 capitalize">
@@ -227,14 +219,15 @@ const UserGarbageRequest = () => {
                           {garbage.status}
                         </span>
                       </td>
-
                       <td className="px-3 py-4 text-right">
-                        <a
-                          onClick={() => handleClickOpen(garbage._id)}
-                          className="font-medium text-red-600 :text-blue-500 cursor-pointer"
-                        >
-                          <DeleteIcon />
-                        </a>
+                        {garbage.status === "Pending" && (
+                          <a
+                            onClick={() => handleClickOpen(garbage._id)}
+                            className="font-medium text-red-600 :text-blue-500 cursor-pointer"
+                          >
+                            <DeleteIcon />
+                          </a>
+                        )}
                       </td>
                     </tr>
                   ))
