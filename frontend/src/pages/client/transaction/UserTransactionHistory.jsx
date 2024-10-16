@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import AdminDrawer from "../components/AdminDrawer";
-import { getAllTransactions } from "../../../api/transactionApi";
+import React, { useEffect, useState } from "react";
+import UserDrawer from "../components/UserDrawer";
+import { getUserTransactions } from "../../../api/transactionApi";
 
-const AdminTransactions = () => {
+const UserTransactionHistory = () => {
   const [transactions, setTransactions] = useState([]);
-
-  const fetchAllTransactions = async () => {
+  const fetchAllUserTransactions = async () => {
     try {
-      const res = await getAllTransactions();
-      setTransactions(res);
+      const res = await getUserTransactions();
+      const paidTransactions = res.filter(
+        (paidTransaction) => paidTransaction.isPaid
+      );
+      setTransactions(paidTransactions);
+      console.log(`paidTransactions => `, transactions);
     } catch (error) {
-      // alert(error.message);
       toast.error(error.message, {
         position: "bottom-right",
         autoClose: 5000,
@@ -21,13 +23,12 @@ const AdminTransactions = () => {
         progress: undefined,
         theme: "light",
       });
-
       console.error("Error fetching transactions: ", error.message);
     }
   };
 
   useEffect(() => {
-    fetchAllTransactions();
+    fetchAllUserTransactions();
   }, []);
 
   function getTypeClassName(type) {
@@ -42,11 +43,11 @@ const AdminTransactions = () => {
   }
 
   return (
-    <AdminDrawer>
+    <UserDrawer>
       <div className="mb-28 shadow-md rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 :text-gray-400">
           <caption className="p-5 text-lg font-semibold text-left rtl:text-right text-[#48752c] bg-white :text-white :bg-gray-800">
-            Excessive transaction Disposal Requests
+            Transaction History
           </caption>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 :bg-gray-700 :text-gray-400">
             <tr>
@@ -57,14 +58,8 @@ const AdminTransactions = () => {
                 Transaction ID
               </th>
               <th scope="col" className="px-6 py-3">
-                Email
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Description
               </th>
-              {/* <th scope="col" className="px-6 py-3">
-                Is Refund
-              </th> */}
               <th scope="col" className="px-6 py-3">
                 Paid
               </th>
@@ -93,19 +88,8 @@ const AdminTransactions = () => {
                         key={transaction._id}
                       >
                         <td className="px-6 py-4">{transaction._id}</td>
-                        <td className="px-6 py-4">
-                          {transaction.user ? transaction.user.email : ""}
-                        </td>
                         <td className="px-6 py-4">{transaction.description}</td>
-                        {/* <td
-                          className={`px-6 py-4 font-semibold ${
-                            transaction.isRefund === true
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {transaction.isRefund ? "Yes" : "No"}
-                        </td> */}
+
                         <td className="px-6 py-4 capitalize">
                           <span
                             className={`uppercase font-semibold text-[12px] px-2.5 py-0.5 rounded ${getTypeClassName(
@@ -147,8 +131,8 @@ const AdminTransactions = () => {
           </tbody>
         </table>
       </div>
-    </AdminDrawer>
+    </UserDrawer>
   );
 };
 
-export default AdminTransactions;
+export default UserTransactionHistory;

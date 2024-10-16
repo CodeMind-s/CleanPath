@@ -10,6 +10,7 @@ import UserDashboard from "./pages/client/dashboard/UserDashboard";
 import UserTransaction from "./pages/client/transaction/UserTransaction";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
 import AdminGarbageUpdate from "./pages/admin/garbage/AdminGarbageUpdate";
+import UserTransactionHistory from "./pages/client/transaction/UserTransactionHistory";
 
 function App() {
   return (
@@ -26,6 +27,11 @@ function App() {
             exact
             path="/user/my-transaction"
             Component={UserTransaction}
+          />
+          <Route
+            exact
+            path="/user/my-transaction/history"
+            Component={UserTransactionHistory}
           />
 
           {/* Admin routes */}
