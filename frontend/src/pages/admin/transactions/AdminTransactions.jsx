@@ -62,9 +62,9 @@ const AdminTransactions = () => {
               <th scope="col" className="px-6 py-3">
                 Description
               </th>
-              <th scope="col" className="px-6 py-3">
+              {/* <th scope="col" className="px-6 py-3">
                 Is Refund
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Paid
               </th>
@@ -97,7 +97,7 @@ const AdminTransactions = () => {
                           {transaction.user ? transaction.user.email : ""}
                         </td>
                         <td className="px-6 py-4">{transaction.description}</td>
-                        <td
+                        {/* <td
                           className={`px-6 py-4 font-semibold ${
                             transaction.isRefund === true
                               ? "text-green-600"
@@ -105,7 +105,7 @@ const AdminTransactions = () => {
                           }`}
                         >
                           {transaction.isRefund ? "Yes" : "No"}
-                        </td>
+                        </td> */}
                         <td className="px-6 py-4 capitalize">
                           <span
                             className={`uppercase font-semibold text-[12px] px-2.5 py-0.5 rounded ${getTypeClassName(
