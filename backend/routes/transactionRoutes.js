@@ -5,6 +5,7 @@ import {
   getAllTransactions,
   getTransactionsByUser,
   getTransactionById,
+  getTransactionsByUserId,
   updateTransaction,
 } from "../controllers/transactionController.js";
 
@@ -21,6 +22,11 @@ router
 
 // Route for getting transactions by user
 router.route("/user").get(authenticate, getTransactionsByUser); // Get transactions for the authenticated user
+
+// Route for getting transactions by user ID
+router
+  .route("/:userId")
+  .get(authenticate, authorizeAdmin, getTransactionsByUserId); // Get transactions by user ID
 
 // Route for getting, and updating a transaction by ID
 router
