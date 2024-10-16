@@ -64,7 +64,7 @@ const createWMA = asyncHandler(async (req, res) => {
     throw new Error("Invalid wma data");
   }
 });
-// wma create wenwda yes dn create kala aluthen okii
+
 /**
  * @route   POST /api/wmas/auth
  * @desc    Authenticate wma and get token

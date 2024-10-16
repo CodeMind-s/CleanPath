@@ -1,112 +1,351 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthService from "../../api/userApi";
 import logo from "../../assets/logo.png";
+import { toast } from "react-toastify";
+import WMARegister from "../wma/auth/WMARegister";
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [imageSelected, setImageSelected] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUser, setIsUser] = useState(true);
+  const [uploadImageUrl, setUploadImageUrl] = useState("");
+  const navigate = useNavigate();
+
+  // State for user input
+  const [userEntryData, setUserEntryData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    address: "",
+    contact: "",
+    area: "",
+    confirmPassword: "",
+  });
+
+  const { username, email, password, address, contact, area, confirmPassword } =
+    userEntryData;
+
+  // Handle form input change
+  const handleChange = (e) => {
+    setUserEntryData({
+      ...userEntryData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match!");
+      setIsLoading(false);
+      return;
+    }
+
+    // Upload image and handle registration
+    try {
+      const uploadedImageUrl = await uploadImage();
+      setUploadImageUrl(uploadedImageUrl);
+
+      const newUserEntry = {
+        username,
+        email,
+        password,
+        address,
+        contact,
+        area,
+        profileImage: uploadedImageUrl,
+      };
+
+      console.log("Sending new user data:", newUserEntry);
+      await AuthService.register(newUserEntry);
+
+      toast.success("Your account has been created successfully!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      navigate("/login");
+    } catch (error) {
+      console.error("Error creating account:", error);
+      toast.error("Failed to create account. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle image upload to Cloudinary
+  const uploadImage = async () => {
+    if (!imageSelected) return null;
+
+    const data = new FormData();
+    data.append("file", imageSelected);
+    data.append("upload_preset", "GarboGoUser_Preset");
+    data.append("cloud_name", "dg8cpnx1m");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dg8cpnx1m/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      const imageUrl = await res.json();
+      return imageUrl.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw new Error("Failed to upload image");
+    }
+  };
+  useEffect(() => {
+    setIsUser(true); // This will trigger a re-render every time
+  }, []);
+
   return (
     <div>
       <section className="bg-[#f5fadf] :bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="flex flex-col items-center justify-center px-6 py-8">
           <a
             href="#"
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 :text-white"
           >
             <img className="w-44 mr-2" src={logo} alt="logo" />
           </a>
-          <div className="w-full bg-white rounded-lg shadow :border md:mt-0 sm:max-w-md xl:p-0 :bg-gray-800 :border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl :text-white">
-                Create an account
-              </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
-                <div>
-                  <label
-                    for="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 :text-white"
+          <div className=" bg-white rounded-lg shadow :border w-[70%]">
+            <div className="p-6 ">
+              <div className="flex justify-center  border-b mx-6">
+                <div className="flex w-[50%] justify-between font-bold my-2 text-gray-500">
+                  <h1
+                    className={`cursor-pointer ${
+                      isUser ? "text-[#64903c]" : "text-black"
+                    }`}
+                    onClick={() => setIsUser(true)}
                   >
-                    Your email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
-                    for="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 :text-white"
+                    User
+                  </h1>
+                  <h1
+                    className={`cursor-pointer ${
+                      !isUser ? "text-[#64903c]" : "text-black"
+                    }`}
+                    onClick={() => setIsUser(false)}
                   >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500"
-                    required=""
-                  />
+                    WMA
+                  </h1>
                 </div>
+              </div>
+              {isUser && (
                 <div>
-                  <label
-                    for="confirm-password"
-                    className="block mb-2 text-sm font-medium text-gray-900 :text-white"
+                  <h1 className="my-4 text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl :text-white">
+                    Create an User Account
+                  </h1>
+                  <form
+                    className="space-y-4 md:space-y-6 "
+                    onSubmit={handleSubmit}
                   >
-                    Confirm password
-                  </label>
-                  <input
-                    type="confirm-password"
-                    name="confirm-password"
-                    id="confirm-password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500"
-                    required=""
-                  />
-                </div>
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="terms"
-                      aria-describedby="terms"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 :bg-gray-700 :border-gray-600 :focus:ring-blue-600 :ring-offset-gray-800"
-                      required=""
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      for="terms"
-                      className="font-light text-gray-500 :text-gray-300"
-                    >
-                      I accept the{" "}
-                      <a
-                        className="font-medium text-blue-600 hover:underline :text-blue-500"
-                        href="#"
+                    <div className="flex">
+                      <div className="w-[50%] mx-4">
+                        <div>
+                          <label
+                            htmlFor="email"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Your Email
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            value={email}
+                            onChange={handleChange}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            placeholder="name@gmail.com"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="username"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Your Username
+                          </label>
+                          <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            value={username}
+                            onChange={handleChange}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            placeholder="Enter Username"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="address"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Your Address
+                          </label>
+                          <input
+                            type="text"
+                            name="address"
+                            id="address"
+                            value={address}
+                            onChange={handleChange}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            placeholder="Enter Address"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="area"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Your Area
+                          </label>
+                          <select
+                            name="area"
+                            id="area"
+                            value={area}
+                            onChange={handleChange}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            required
+                          >
+                            <option value="">Select Your Area</option>
+                            <option value="Colombo">Colombo</option>
+                            <option value="Kandy">Kandy</option>
+                            <option value="Galle">Galle</option>
+                            <option value="Jaffna">Jaffna</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="w-[50%] mx-4">
+                        <div>
+                          <label
+                            htmlFor="contact"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Your Contact
+                          </label>
+                          <input
+                            type="tel"
+                            name="contact"
+                            id="contact"
+                            value={contact}
+                            onChange={handleChange}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            placeholder="Enter Contact Number"
+                            pattern="[0-9]{10}"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="profileImage"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Add Profile Image
+                          </label>
+                          <input
+                            type="file"
+                            name="profileImage"
+                            id="profileImage"
+                            onChange={(e) =>
+                              setImageSelected(e.target.files[0])
+                            }
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            accept="image/*"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="password"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Password
+                          </label>
+                          <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            value={password}
+                            onChange={handleChange}
+                            placeholder="••••••••"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="confirmPassword"
+                            className="block my-2 text-sm font-medium text-gray-900 :text-white"
+                          >
+                            Confirm Password
+                          </label>
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={handleChange}
+                            placeholder="••••••••"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                            required
+                          />
+                        </div>
+                        {errorMessage && (
+                          <p className="text-sm text-red-500">{errorMessage}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="mx-4 text-sm font-light text-gray-500 :text-gray-400">
+                        Already have an account?{" "}
+                        <a
+                          href="/login"
+                          className="font-medium text-[#64903c] hover:underline :text-blue-500"
+                        >
+                          Login here
+                        </a>
+                      </p>
+                      <button
+                        type="submit"
+                        className="w-auto text-white  bg-[#64903c] hover:bg-[#4d702c] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                        disabled={isLoading}
                       >
-                        Terms and Conditions
-                      </a>
-                    </label>
-                  </div>
+                        {isLoading ? "Processing..." : "Create Account"}
+                      </button>
+                    </div>
+                  </form>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-[#64903c]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center :bg-blue-600 :hover:bg-blue-700 :focus:ring-blue-800"
-                >
-                  Create an account
-                </button>
-                <p className="text-sm font-light text-gray-500 :text-gray-400">
-                  Already have an account?{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 hover:underline :text-blue-500"
-                  >
-                    Login here
-                  </a>
-                </p>
-              </form>
+              )}
+              {!isUser && (
+                <div>
+                  <h1 className="my-4 text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl :text-white">
+                    Create a Waste Management Authority Account
+                  </h1>
+                  <WMARegister />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -8,9 +8,15 @@ import AdminGarbage from "./pages/admin/garbage/AdminGarbage";
 import UserGarbageRequest from "./pages/client/garbage/UserGarbageRequest";
 import UserDashboard from "./pages/client/dashboard/UserDashboard";
 import UserTransaction from "./pages/client/transaction/UserTransaction";
+import UserProfile from "./pages/client/profile/profile";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
 import AdminGarbageUpdate from "./pages/admin/garbage/AdminGarbageUpdate";
 import UserTransactionHistory from "./pages/client/transaction/UserTransactionHistory";
+import WMADashboard from "./pages/wma/dashboard/WMADashboard";
+import WMACollectors from "./pages/wma/collectors/ViewCollectors";
+import WMAProfile from "./pages/wma/profile/WMAProfile";
+import WMASchedules from "./pages/wma/schedule/ViewSchedules";
+import WMATransaction from "./pages/wma/transaction/WMATransaction";
 
 function App() {
   return (
@@ -23,6 +29,7 @@ function App() {
           <Route exact path="/register" Component={Register} />
           <Route exact path="/user/dashboard" Component={UserDashboard} />
           <Route exact path="/user/my-garbage" Component={UserGarbageRequest} />
+          <Route exact path="/user/profile" Component={UserProfile} />
           <Route
             exact
             path="/user/my-transaction"
@@ -32,6 +39,17 @@ function App() {
             exact
             path="/user/my-transaction/history"
             Component={UserTransactionHistory}
+          />
+
+          {/* WMA Routes */}
+          <Route exact path="/wma/dashboard" Component={WMADashboard} />
+          <Route exact path="/wma/collectors" Component={WMACollectors} />
+          <Route exact path="/wma/schedules" Component={WMASchedules} />
+          <Route exact path="/wma/profile" Component={WMAProfile} />
+          <Route
+            exact
+            path="/wma/transactions"
+            Component={WMATransaction}
           />
 
           {/* Admin routes */}

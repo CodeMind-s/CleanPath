@@ -1,7 +1,8 @@
 import React from "react";
+import WMADrawer from "../components/WMADrawer";
 
 const WMADashboard = () => {
-  return <div>WMADashboard</div>;
+  return <WMADrawer>WMADashboard</WMADrawer>;
 };
 
 export default WMADashboard;

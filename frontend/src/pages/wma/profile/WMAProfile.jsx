@@ -1,7 +1,8 @@
 import React from "react";
+import WMADrawer from "../components/WMADrawer"
 
 const WMAProfile = () => {
-  return <div>WMAProfile</div>;
+  return <div><WMADrawer>WMAProfile</WMADrawer></div>;
 };
 
 export default WMAProfile;
