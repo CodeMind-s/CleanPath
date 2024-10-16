@@ -120,6 +120,33 @@ const getTransactionsByUser = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Retrieves all transactions for a specific user by user ID.
+ *
+ * This function fetches all transactions associated with the provided user ID,
+ * populates the user details, and sorts them by creation date in descending order.
+ * If transactions are found, it returns them with a 200 status code. If no transactions
+ * are found, it returns a 404 status code with a "No transactions found for this user" message.
+ *
+ * @param {Object} req - The request object, which should contain the user ID in the params.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the response is sent.
+ */
+const getTransactionsByUserId = asyncHandler(async (req, res) => {
+  const userId = req.params.userId; // Get user ID from request parameters
+
+  // Fetch transactions by user ID
+  const transactions = await Transaction.find({ user: userId })
+    .populate("user", "username email") // Populate user details if needed
+    .sort({ createdAt: -1 }); // Sort transactions by createdAt in descending order
+
+  if (transactions.length > 0) {
+    res.status(200).json(transactions);
+  } else {
+    res.status(404).json({ message: "No transactions found for this user" });
+  }
+});
+
+/**
  * Updates a transaction's payment status.
  *
  * This function updates the payment status of a transaction identified by its ID.
@@ -154,6 +181,7 @@ export {
   createTransaction,
   getAllTransactions,
   getTransactionsByUser,
+  getTransactionsByUserId,
   getTransactionById,
   updateTransaction,
 };
