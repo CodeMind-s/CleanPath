@@ -22,12 +22,19 @@ const AdminGarbageUpdate = () => {
       const garbageWeight = location.state.garbage.weight;
       const rate = location.state.garbage.area.rate;
 
+      let amount = areaType === "weightBased" ? garbageWeight * rate : rate; // Calculate amount
+
+      // Apply discount if the garbage type is "Recyclable"
+      if (location.state.garbage.type === "Recyclable") {
+        amount *= 0.9; // Apply 10% discount
+      }
+
       const newTransaction = {
         userID: location.state.garbage.user._id,
         description: `Garbage Collection In-Progress - ${location.state.garbage.type}`,
-        isRefund: location.state.garbage.type === "Recyclable" ? true : false,
-        isPaid: location.state.garbage.type === "Recyclable" ? true : false,
-        amount: areaType === "weightBased" ? garbageWeight * rate : rate, // Calculate amount
+        isRefund: false,
+        isPaid: false,
+        amount: amount,
       };
 
       try {
