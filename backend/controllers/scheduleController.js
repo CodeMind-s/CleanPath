@@ -43,6 +43,9 @@ const createSchedule = asyncHandler(async (req, res) => {
  */
 const getAllSchedules = asyncHandler(async (req, res) => {
   const schedules = await Schedule.find({})
+  .populate("wmaId", "wmaname")
+  .populate("collectorId", "collectorName")
+  .populate("area", "name");
   res.json(schedules);
 });
 

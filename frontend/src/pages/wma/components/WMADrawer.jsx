@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../../../api/wmaApi";
+import WmaAuthService from "../../../api/wmaApi";
 import logo from "../../../assets/logo.png";
 
 // MUI Components
@@ -58,23 +58,23 @@ const WMADrawer = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const userProfile = await UserApi.getCurrentUserDetails();
-        setProfile(userProfile);
-        console.log(`Profile =>`, userProfile);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       const userProfile = await UserApi.getCurrentUserDetails();
+  //       setProfile(userProfile);
+  //       console.log(`Profile =>`, userProfile);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     }
+  //   };
 
-    fetchProfile();
-  }, []);
+  //   fetchProfile();
+  // }, []);
 
   const handleLogout = async () => {
     try {
-      const response = await AuthService.logoutCurrentUser();
+      const response = await WmaAuthService.logoutCurrentWma();
 
       toast.success("Logout successful", {
         position: "bottom-right",

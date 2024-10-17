@@ -13,9 +13,9 @@ import asyncHandler from "../middlewares/asyncHandler.js";
  * @returns {Object} - A JSON object containing the newly created schedule data
  */
 const createCollector = asyncHandler(async (req, res) => {
-  const { wmaId, truckNumber, collectorName, collectorNIC} = req.body;
+  const { wmaId, truckNumber, collectorName, collectorNIC, contactNo} = req.body;
 
-  if (!wmaId || !truckNumber || !collectorName || !collectorNIC ) {
+  if (!wmaId || !truckNumber || !collectorName || !collectorNIC || contactNo ) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }
@@ -25,6 +25,7 @@ const createCollector = asyncHandler(async (req, res) => {
     truckNumber,
     collectorName,
     collectorNIC,
+    contactNo,
     statusOfCollector: 'Available'
   });
 
@@ -39,7 +40,7 @@ const createCollector = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of all schedules
  */
 const getAllCollectors = asyncHandler(async (req, res) => {
-  const collectors = await Collector.find({})
+  const collectors = await Collector.find({}).populate("wmaId", "wmaname")
   res.json(collectors);
 });
 
@@ -81,7 +82,7 @@ const getCollectorById = asyncHandler(async (req, res) => {
  * @returns {Object} - The updated garbage request
  */
 const updateCollector = asyncHandler(async (req, res) => {
-  const { wmaId, truckNumber, collectorName, collectorNIC, statusOfCollector} = req.body;
+  const { wmaId, truckNumber, collectorName, collectorNIC, statusOfCollector, contactNo} = req.body;
 
   const collector = await Collector.findById(req.params.id);
 
@@ -90,6 +91,7 @@ const updateCollector = asyncHandler(async (req, res) => {
     collector.truckNumber = truckNumber || collector.truckNumber;
     collector.collectorName = collectorName || collector.collectorName;
     collector.collectorNIC = collectorNIC || collector.collectorNIC;
+    collector.contactNo = contactNo || collector.contactNo;
     collector.statusOfCollector = statusOfCollector || collector.statusOfCollector;
 
     const updatedCollector = await collector.save();

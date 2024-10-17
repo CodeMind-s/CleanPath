@@ -20,6 +20,11 @@ const collectorSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  contactNo: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   statusOfCollector: {
     type: String,
     required: true,

@@ -13,8 +13,8 @@ const router = express.Router();
 
 router
   .route("/")
-  .post(createSchedule)
-  .get(getAllSchedules);
+  .post(authenticate, authorizeAdmin, createSchedule)
+  .get(authenticate, authorizeAdmin, getAllSchedules);
   // .post(authenticate, authorizeAdmin, createSchedule)
   // .get(authenticate, getAllSchedules);
 

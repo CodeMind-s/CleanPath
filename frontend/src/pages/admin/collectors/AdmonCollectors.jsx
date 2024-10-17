@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import WMADrawer from "../components/WMADrawer"
-import WmaAuthService from "../../../api/wmaApi"
 import { useNavigate } from 'react-router-dom';
+import AdminDrawer from '../components/AdminDrawer'
 import { getAllSchedules, deleteSchedule } from '../../../api/scheduleApi';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,7 +8,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { ToastContainer, toast } from "react-toastify";
-import { getAllCollectorsInWma } from '../../../api/collectorApi';
+import { getAllCollectors } from '../../../api/collectorApi';
 // MUI
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -22,9 +21,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-function ViewCollectors() {
+function AdminCollectors() {
   const [collectors, setCollectors] = useState([]);
-  const [currentWma, setCurrentWma] = useState([]);
   const [filteredCollectors, setFilteredCollectors] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [selectedCollectorId, setSelectedCollectorId] = useState(null);
@@ -32,25 +30,39 @@ function ViewCollectors() {
   const [searchFilter, setSearchFilter] = useState("");
 
 
-  const fetchCurrentWma = async () => {
+  // const fetchAllCollectors = async () => {
+  //   try {
+  //     const res = await getAllCollectors();
+  //     setCollectors(res);
+  //     setFilteredCollectors(res);
+  //   } catch (error) {
+  //     alert(error.message);
+  //     console.error("Error fetching collectors: ", error.message);
+  //   }
+  // };
+  const fetchRandomImage = async () => {
     try {
-      const res = await WmaAuthService.getCurrentWmaDetails();
-      setCurrentWma(res);
+      const response = await fetch("https://randomuser.me/api/");
+      const data = await response.json();
+      return data.results[0].picture.thumbnail;
     } catch (error) {
-      alert(error.message);
-      console.error("Error fetching WMAs: ", error.message);
+      console.error("Error fetching image:", error);
+      return ""; // Return an empty string if fetching fails
     }
   };
 
-  useEffect(() => {
-    fetchCurrentWma();
-  })
-
-  const fetchAllCollectorsInWma = async (currentWma) => {
+  const fetchAllCollectors = async () => {
     try {
-      const res = await getAllCollectorsInWma(currentWma._id);
-      setCollectors(res);
-      setFilteredCollectors(res);
+      const res = await getAllCollectors();
+      // Generate random profile images for each collector
+      const collectorsWithImages = await Promise.all(
+        res.map(async (collector) => ({
+          ...collector,
+          profileImage: await fetchRandomImage(),
+        }))
+      );
+      setCollectors(collectorsWithImages);
+      setFilteredCollectors(collectorsWithImages);
     } catch (error) {
       alert(error.message);
       console.error("Error fetching collectors: ", error.message);
@@ -58,11 +70,8 @@ function ViewCollectors() {
   };
 
   useEffect(() => {
-    if (currentWma._id) {
-      fetchAllCollectorsInWma(currentWma);
-    }
-    // fetchAllCollectorsInWma(currentWma);
-  }, [currentWma])
+    fetchAllCollectors();
+  }, [])
 
   const handleClickOpen = (id) => {
     setSelectedScheduleId(id);
@@ -119,7 +128,7 @@ function ViewCollectors() {
   }, [statusFilter, searchFilter, collectors]);
 
   return (
-    <WMADrawer>
+    <AdminDrawer>
       <h1 className="m-5 text-2xl font-semibold text-green-900">
             Collector Management
         </h1>
@@ -222,7 +231,7 @@ function ViewCollectors() {
                       className="px-5 py-2 font-medium text-gray-900 whitespace-nowrap :text-white"
                     >
                     <div className=' flex justify-start items-center'>
-                    <img className=' rounded-full h-[35px]' src={collector.profileImage ? collector.profileImage : 'https://img.icons8.com/ios-filled/100/40C057/user-male-circle.png' } alt="Collector Profile" />
+                    <img className=' rounded-full h-[35px]' src={collector.profileImage} alt="Collector Profile" />
                       <span className=' pl-3'>{collector.collectorName}</span>
                     </div>
                     </th>
@@ -293,8 +302,8 @@ function ViewCollectors() {
         </DialogActions>
       </Dialog>
       <ToastContainer />
-    </WMADrawer>
+    </AdminDrawer>
   )
 }
 
-export default ViewCollectors
+export default AdminCollectors

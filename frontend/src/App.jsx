@@ -17,6 +17,11 @@ import WMACollectors from "./pages/wma/collectors/ViewCollectors";
 import WMAProfile from "./pages/wma/profile/WMAProfile";
 import WMASchedules from "./pages/wma/schedule/ViewSchedules";
 import WMATransaction from "./pages/wma/transaction/WMATransaction";
+import AdminSchedule from "./pages/admin/schedule/AdminSchedule";
+import AdminScheduleUpdate from "./pages/admin/schedule/AdminScheduleUpdate";
+import AdminScheduleCreate from "./pages/admin/schedule/AdminScheduleCreateForm";
+import AdminCollectors from "./pages/admin/collectors/AdmonCollectors";
+import AdminUsers from "./pages/admin/user/Adminusers";
 
 function App() {
   return (
@@ -64,6 +69,31 @@ function App() {
             exact
             path="/admin/transactions"
             Component={AdminTransactions}
+          />
+          <Route
+            exact
+            path="/admin/schedules"
+            Component={AdminSchedule}
+          />
+          <Route
+            exact
+            path="/admin/schedules/update"
+            Component={AdminScheduleUpdate}
+          />
+          <Route
+            exact
+            path="/admin/schedules/create"
+            Component={AdminScheduleCreate}
+          />
+          <Route
+            exact
+            path="/admin/collectors"
+            Component={AdminCollectors}
+          />
+          <Route
+            exact
+            path="/admin/users"
+            Component={AdminUsers}
           />
         </Routes>
       </Router>

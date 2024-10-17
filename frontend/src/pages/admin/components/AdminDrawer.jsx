@@ -92,7 +92,7 @@ function AdminDrawer({ children }) {
           },
           {
             icon: <DeleteSweepIcon sx={iconStyle} />,
-            text: "Garbage",
+            text: "Garbage Requests",
             link: "/admin/garbage",
           },
           {
@@ -102,13 +102,13 @@ function AdminDrawer({ children }) {
           },
           {
             icon: <LocalShippingIcon sx={iconStyle} />,
-            text: "Truck",
-            link: "/admin/trucks",
+            text: "Collectors",
+            link: "/admin/collectors",
           },
           {
             icon: <EventAvailableIcon sx={iconStyle} />,
-            text: "Schedule",
-            link: "/admin/schedule",
+            text: "Schedules",
+            link: "/admin/schedules",
           },
           {
             icon: <PaidIcon sx={iconStyle} />,
