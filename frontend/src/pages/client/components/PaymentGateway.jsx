@@ -66,8 +66,11 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 ease-in-out">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full transform transition-transform duration-300 ease-in-out">
         <div className="flex items-center justify-between mb-7">
-          <div className="flex items-center gap-2">
-            <CreditCardIcon fontSize="large" className="text-blue-500" />
+          <div className="flex flex-col items-start gap-2">
+            <CreditCardIcon
+              fontSize="large"
+              className="bg-green-200 p-2 rounded-lg text-green-600"
+            />
             <h2 className="text-xl font-semibold text-gray-800 text-left">
               Payment Details
             </h2>
@@ -85,7 +88,7 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition"
               placeholder="John Doe"
               required
             />
@@ -103,7 +106,7 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
                   setCardNumber(value);
                 }
               }}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition ${
                 errors.cardNumber ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="1234 5678 9012 3456"
@@ -130,7 +133,7 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
                     setExpiry(value);
                   }
                 }}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition ${
                   errors.expiry ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="MM/YY"
@@ -154,7 +157,7 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
                     setCvc(value);
                   }
                 }}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition ${
                   errors.cvc ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="123"
@@ -176,7 +179,7 @@ const PaymentGateway = ({ onSubmitPayment, onClose }) => {
           <div className="flex w-full justify-center items-center mt-6">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold w-[100%] p-2 rounded-md transition"
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold w-[100%] p-2 rounded-md transition"
             >
               Submit Payment
             </button>

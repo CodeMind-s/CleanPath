@@ -20,7 +20,7 @@ router
   .post(createWMA)
   .get(authenticate, authorizeAdmin,getAllWMAs);
 router.post("/auth", loginWMA);
-router.post("/logout", authenticateWMA, logoutCurrentWMA); //aiyoooekneeee theruna
+router.post("/logout", authenticateWMA, logoutCurrentWMA); 
 
 router
   .route("/wmaprofile")
