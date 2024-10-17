@@ -11,8 +11,9 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     area: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Area",
     },
     contact: {
       type: String,

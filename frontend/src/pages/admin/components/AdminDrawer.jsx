@@ -25,6 +25,8 @@ import PaidIcon from "@mui/icons-material/Paid";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
+import BusinessIcon from "@mui/icons-material/Business";
+
 
 // Custom Components
 import { toast, ToastContainer } from "react-toastify";
@@ -97,8 +99,13 @@ function AdminDrawer({ children }) {
           },
           {
             icon: <GroupIcon sx={iconStyle} />,
-            text: "Users",
+            text: "Residents",
             link: "/admin/users",
+          },
+          {
+            icon: <BusinessIcon sx={iconStyle} />,
+            text: "WMAs",
+            link: "/admin/wmas",
           },
           {
             icon: <LocalShippingIcon sx={iconStyle} />,
