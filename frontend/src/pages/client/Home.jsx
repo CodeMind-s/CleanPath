@@ -14,29 +14,29 @@ const Home = () => {
     <>
       <Navbar />
       <div className="">
-        <section className="hero bg-gradient-to-tr from-green-500 via-green-700 to-green-800 text-white">
-          <div className="container flex flex-col md:flex-row items-center justify-between">
-            <div className="text-center md:text-left md:w-1/2 px-20">
-              <h1 className="text-[70px] font-semibold mb-4 leading-[4.5rem]">
+        <>
+          <div className="container flex flex-col md:flex-row items-center justify-between  bg-gradient-to-tr from-green-500 via-green-700 to-green-800 text-white">
+            <div className="text-center md:text-left px-20">
+              <h1 className="text-[75px] font-bold mb-4 leading-[4.5rem]">
                 Digital Garbage Management
               </h1>
               <p className="mb-6">
                 We provide innovative solutions to efficiently manage and track
                 waste disposal, making our environment cleaner and greener.
               </p>
-              <button className="bg-white text-green-600 px-6 py-2 rounded">
+              <button className="bg-white text-green-600 px-6 py-2 font-semibold rounded-full">
                 Learn More
               </button>
             </div>
-            <div className="md:w-2/3">
+            <div>
               <img
                 src="https://plus.unsplash.com/premium_photo-1681488048176-1cd684f6be8a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Garbage Management"
-                className="w-full h-auto"
+                className="w- h-auto"
               />
             </div>
           </div>
-        </section>
+        </>
         <section className="waste-management-section py-24 px-[200px] bg-white">
           <div className="">
             <div className="flex w-full justify-between items-center">
