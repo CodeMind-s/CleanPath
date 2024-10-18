@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../../../api/wmaApi";
+import WmaAuthService from "../../../api/wmaApi";
 import { toast } from "react-toastify";
 
 const WMARegister = () => {
@@ -68,7 +68,7 @@ const WMARegister = () => {
       };
 
       console.log("Sending new user data:", newUserEntry);
-      await AuthService.register(newUserEntry);
+      await WmaAuthService.wmaRegister(newUserEntry);
 
       toast.success("Your account has been created successfully!", {
         position: "bottom-right",

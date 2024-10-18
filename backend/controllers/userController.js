@@ -142,7 +142,7 @@ const logoutCurrentUser = asyncHandler(async (req, res) => {
  * @throws  {500} If a server error occurs
  */
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate('area'); 
   res.json(users);
 });
 

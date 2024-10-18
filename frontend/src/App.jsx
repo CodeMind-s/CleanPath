@@ -3,21 +3,33 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/client/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminGarbage from "./pages/admin/garbage/AdminGarbage";
 import UserGarbageRequest from "./pages/client/garbage/UserGarbageRequest";
 import UserDashboard from "./pages/client/dashboard/UserDashboard";
 import UserTransaction from "./pages/client/transaction/UserTransaction";
 import UserProfile from "./pages/client/profile/profile";
+import UserTransactionHistory from "./pages/client/transaction/UserTransactionHistory";
+
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminGarbage from "./pages/admin/garbage/AdminGarbage";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
 import UserSmartDeviceRequest from "./pages/client/smartDevice/UserSmartDeviceRequest";
 import AdminGarbageUpdate from "./pages/admin/garbage/AdminGarbageUpdate";
-import UserTransactionHistory from "./pages/client/transaction/UserTransactionHistory";
+import AdminUsers from "./pages/admin/users/AdminUsers";
+import AdminWMAs from "./pages/admin/wmas/AdminWMAs";
+
 import WMADashboard from "./pages/wma/dashboard/WMADashboard";
 import WMACollectors from "./pages/wma/collectors/ViewCollectors";
 import WMAProfile from "./pages/wma/profile/WMAProfile";
 import WMASchedules from "./pages/wma/schedule/ViewSchedules";
 import WMATransaction from "./pages/wma/transaction/WMATransaction";
+import AdminSchedule from "./pages/admin/schedule/AdminSchedule";
+import AdminScheduleUpdate from "./pages/admin/schedule/AdminScheduleUpdate";
+import AdminScheduleCreate from "./pages/admin/schedule/AdminScheduleCreateForm";
+import AdminCollectors from "./pages/admin/collectors/AdmonCollectors";
+import AdminCollectorUpdate from "./pages/admin/collectors/AdminCollectorUpdate";
+import WmaCollectorUpdate from "./pages/wma/collectors/UpdateCollector";
+import WmaCollectorCreate from "./pages/wma/collectors/AddCollectors";
+import ScheduleUpdate from "./pages/wma/schedule/ScheduleUpdate";
 import AdminDevice from "./pages/admin/device/AdminDevice";
 // import AdminDeviceUpdate from "./pages/admin/device/AdminDeviceUpdate";
 
@@ -52,14 +64,25 @@ function App() {
           {/* WMA Routes */}
           <Route exact path="/wma/dashboard" Component={WMADashboard} />
           <Route exact path="/wma/collectors" Component={WMACollectors} />
-          <Route exact path="/wma/schedules" Component={WMASchedules} />
-          <Route exact path="/wma/profile" Component={WMAProfile} />
+          <Route
+            exact
+            path="/wma/collectors/update"
+            Component={WmaCollectorUpdate}
+          />
+          <Route
+            exact
+            path="/wma/collectors/create"
+            Component={WmaCollectorCreate}
+          />
           <Route exact path="/wma/transactions" Component={WMATransaction} />
           {/* <Route
             exact
-            path="/user/smartDevice"
-            Component={UserSmartDeviceRequest}
-          /> */}
+            path="/wma/schedules/update"
+            Component={ScheduleUpdate}
+          />
+          <Route exact path="/wma/schedules" Component={WMASchedules} />
+          <Route exact path="/wma/profile" Component={WMAProfile} />
+          <Route exact path="/wma/transactions" Component={WMATransaction} />
 
           {/* Admin routes */}
           <Route exact path="/admin/dashboard" Component={AdminDashboard} />
@@ -74,6 +97,25 @@ function App() {
             path="/admin/transactions"
             Component={AdminTransactions}
           />
+          <Route exact path="/admin/schedules" Component={AdminSchedule} />
+          <Route
+            exact
+            path="/admin/schedules/update"
+            Component={AdminScheduleUpdate}
+          />
+          <Route
+            exact
+            path="/admin/schedules/create"
+            Component={AdminScheduleCreate}
+          />
+          <Route exact path="/admin/collectors" Component={AdminCollectors} />
+          <Route
+            exact
+            path="/admin/collectors/update"
+            Component={AdminCollectorUpdate}
+          />
+          <Route exact path="/admin/users" Component={AdminUsers} />
+          <Route exact path="/admin/wmas" Component={AdminWMAs} />
           <Route exact path="/admin/devices" Component={AdminDevice} />
           {/* <Route
             exact

@@ -30,7 +30,7 @@ router
 // Administrator Routes
 router
   .route("/:id")
-  .delete(authenticate, authorizeAdmin, deleteUserById)
+  .delete( deleteUserById)
   .get(authenticate, authorizeAdmin, getUserById)
   .put(authenticate, authorizeAdmin,updateUserById);
 

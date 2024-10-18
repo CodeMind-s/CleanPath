@@ -1,11 +1,11 @@
 import ApiHelper from "../helpers/apiHelper";
 
-class AuthService {
+class WmaAuthService {
   constructor() {
     this.api = new ApiHelper();
   }
 
-  async register(wmaData) {
+  async wmaRegister(wmaData) {
     try {
       const response = await this.api.post("wmas", wmaData);
       // Assuming the backend returns a token upon successful registration
@@ -14,12 +14,12 @@ class AuthService {
       }
       return response;
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("WMA Registration error:", error);
       throw error;
     }
   }
 
-  async login(credentials) {
+  async wmaLogin(credentials) {
     try {
       const response = await this.api.post("wmas/auth", credentials);
       // Assuming the backend returns a token upon successful login
@@ -29,15 +29,15 @@ class AuthService {
       }
       return response;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("WMA Login error:", error);
       throw error;
     }
   }
 
-  async getCurrentUserDetails() {
+  async getCurrentWmaDetails() {
     try {
       const response = await this.api.get(
-        "wmas/profile", // Assuming 'me' is the endpoint for fetching the current wma profile
+        "wmas/wmaprofile", // Assuming 'me' is the endpoint for fetching the current user profile
         {
           withCredentials: true, // Ensure cookies are sent with the request
         }
@@ -51,7 +51,7 @@ class AuthService {
     }
   }
 
-  async getAllUsers() {
+  async getAllWmas() {
     try {
       const wmas = await this.api.get(
         "wmas",
@@ -67,21 +67,21 @@ class AuthService {
     }
   }
 
-  async deleteUser(id) {
+  async deleteWma(id) {
     try {
-      const deletedUser = await this.api.delete(`wmas/${id}`, {
+      const deletedWma = await this.api.delete(`wmas/${id}`, {
         withCredentials: true,
       });
-      return deletedUser.data;
+      return deletedWma.data;
     } catch (error) {
       console.error("Error deleting wma:", error.message);
       throw error;
     }
   }
 
-  async updateUser(profileData) {
+  async updateWma(wmaProfileData) {
     try {
-      const response = await this.api.put("wmas/profile", profileData, {
+      const response = await this.api.put("wmas/profile", wmaProfileData, {
         withCredentials: true,
       });
       return response.data;
@@ -91,12 +91,12 @@ class AuthService {
     }
   }
 
-  async logoutCurrentUser() {
+  async logoutCurrentWma() {
     try {
       const response = await this.api.post("wmas/logout");
       // console.log(`response => `, response);
       // alert(response.message); // Display the success message
-      // Perform any additional actions like redirecting the wma to the login page
+      // Perform any additional actions like redirecting the user to the login page
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -108,17 +108,17 @@ class AuthService {
     // You might want to perform additional cleanup here
   }
 
-  isAuthenticated() {
+  isAuthenticatedWma() {
     return localStorage.getItem("token") !== null;
   }
 
-  getToken() {
+  getWmaToken() {
     return localStorage.getItem("token");
   }
 
-  getUserId() {
+  getWmaId() {
     return localStorage.getItem("wmaId");
   }
 }
 
-export default new AuthService();
+export default new WmaAuthService();

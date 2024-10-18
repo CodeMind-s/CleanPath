@@ -61,7 +61,7 @@ const authenticateWMA = asyncHandler(async (req, res, next) => {
 
   // Read JWT from 'jwt' cookie
   token = req.cookies.jwt_wma;
-  console.log(`token from authMiddleware => `, token);
+  // console.log(`token from authMiddleware => `, token);
 
   if (token) {
     try {

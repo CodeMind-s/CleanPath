@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../api/userApi";
+import { getAllAreas } from "../../api/areaApi";
 import logo from "../../assets/logo.png";
 import { toast } from "react-toastify";
 import WMARegister from "../wma/auth/WMARegister";
@@ -26,6 +27,21 @@ const Register = () => {
 
   const { username, email, password, address, contact, area, confirmPassword } =
     userEntryData;
+  const [areas, setAreas] = useState([]); // State to store areas fetched from the API
+  const [areaId, setAreaId] = useState(null); // State for storing selected area ID
+
+  const fetchAllAreas = async () => {
+    try {
+      const res = await getAllAreas(); // Use the named export
+      setAreas(res);
+    } catch (error) {
+      alert(error.message);
+      console.error("Error fetching Areas: ", error.message);
+    }
+  };
+  useEffect(() => {
+    fetchAllAreas();
+  }, []);
 
   // Handle form input change
   const handleChange = (e) => {
@@ -53,13 +69,14 @@ const Register = () => {
       const uploadedImageUrl = await uploadImage();
       setUploadImageUrl(uploadedImageUrl);
 
+      // Assuming 'area' is now an ID/reference (e.g., from a dropdown or selection)
       const newUserEntry = {
         username,
         email,
         password,
         address,
         contact,
-        area,
+        area: areaId, // Make sure 'areaId' is the correct reference ID for the area
         profileImage: uploadedImageUrl,
       };
 
@@ -223,16 +240,23 @@ const Register = () => {
                           <select
                             name="area"
                             id="area"
-                            value={area}
-                            onChange={handleChange}
+                            value={areaId} // use areaId instead of area
+                            onChange={(e) => setAreaId(e.target.value)}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
                             required
                           >
                             <option value="">Select Your Area</option>
-                            <option value="Colombo">Colombo</option>
-                            <option value="Kandy">Kandy</option>
-                            <option value="Galle">Galle</option>
-                            <option value="Jaffna">Jaffna</option>
+                            {areas && areas.length > 0 ? (
+                              areas.map((areaItem) => (
+                                <option key={areaItem._id} value={areaItem._id}>
+                                  {" "}
+                                  {/* Use area ID here */}
+                                  {areaItem.name}
+                                </option>
+                              ))
+                            ) : (
+                              <option>No areas available</option>
+                            )}
                           </select>
                         </div>
                       </div>

@@ -43,6 +43,9 @@ const createSchedule = asyncHandler(async (req, res) => {
  */
 const getAllSchedules = asyncHandler(async (req, res) => {
   const schedules = await Schedule.find({})
+  .populate("wmaId", "wmaname")
+  .populate("collectorId", "collectorName")
+  .populate("area", "name");
   res.json(schedules);
 });
 
@@ -55,6 +58,20 @@ const getAllSchedules = asyncHandler(async (req, res) => {
 const getTruckSchedules = asyncHandler(async (req, res) => {
   const schedule = await Schedule.find({ collectorId: req.params.id })
 
+  res.json(schedule);
+});
+
+/**
+ * @route   GET /api/schedules/wma-schedules
+ * @desc    Get all schedules assingd to the wma
+ * @access  Private (Authenticated WMA)
+ * @returns {Array} - A list of schedules assingd to the truck
+ */
+const getSchedulesByWma = asyncHandler(async (req, res) => {
+  const schedule = await Schedule.find({ wmaId: req.params.id })
+  .populate("wmaId", "wmaname")
+  .populate("collectorId", "collectorName")
+  .populate("area", "name");
   res.json(schedule);
 });
 
@@ -131,4 +148,5 @@ export {
   getScheduleById,
   updateSchedule,
   deleteSchedule,
+  getSchedulesByWma,
 };

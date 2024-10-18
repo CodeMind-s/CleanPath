@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AuthService from "../../../api/wmaApi";
+import WmaAuthService from "../../../api/wmaApi";
 import { Link, useNavigate } from "react-router-dom";
 
 const WMALogin = () => {
@@ -13,7 +13,7 @@ const WMALogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await AuthService.login({ email, password });
+      const response = await WmaAuthService.wmaLogin({ email, password });
       console.log("Login successful", response);
       navigate("/wma/dashboard");
     } catch (error) {
