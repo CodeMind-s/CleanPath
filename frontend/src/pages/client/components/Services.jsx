@@ -74,7 +74,7 @@ const WasteSolutions = () => {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-green-700 mb-2">
                   {solution.title}
                 </h3>
                 <p className="text-gray-600 text-sm">{solution.description}</p>

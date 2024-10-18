@@ -146,7 +146,7 @@ const UserTransaction = () => {
             <h3 className="text-xl font-semibold text-gray-600">
               Total Amount To Be Paid
             </h3>
-            <p className="text-[50px] font-bold text-yellow-600">
+            <p className="text-[40px] font-bold text-yellow-600">
               LKR {totalUnpaidAmount}.00
             </p>
           </div>
@@ -165,7 +165,7 @@ const UserTransaction = () => {
                 </button>
               </Link>
             </div>
-            <p className="text-[50px] font-bold text-green-600">
+            <p className="text-[40px] font-bold text-green-600">
               LKR {totalPaidAmount}.00
             </p>
           </div>
