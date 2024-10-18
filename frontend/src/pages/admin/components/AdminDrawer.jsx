@@ -91,6 +91,11 @@ function AdminDrawer({ children }) {
             link: "/admin/dashboard",
           },
           {
+            icon: <DashboardIcon sx={iconStyle} color="" />,
+            text: "Devices",
+            link: "/admin/devices",
+          },
+          {
             icon: <DeleteSweepIcon sx={iconStyle} />,
             text: "Garbage",
             link: "/admin/garbage",

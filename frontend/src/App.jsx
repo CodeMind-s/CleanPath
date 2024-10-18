@@ -18,6 +18,8 @@ import WMACollectors from "./pages/wma/collectors/ViewCollectors";
 import WMAProfile from "./pages/wma/profile/WMAProfile";
 import WMASchedules from "./pages/wma/schedule/ViewSchedules";
 import WMATransaction from "./pages/wma/transaction/WMATransaction";
+import AdminDevice from "./pages/admin/device/AdminDevice";
+// import AdminDeviceUpdate from "./pages/admin/device/AdminDeviceUpdate";
 
 function App() {
   return (
@@ -41,6 +43,11 @@ function App() {
             path="/user/my-transaction/history"
             Component={UserTransactionHistory}
           />
+          <Route
+            exact
+            path="/user/smartDevice"
+            Component={UserSmartDeviceRequest}
+          />
 
           {/* WMA Routes */}
           <Route exact path="/wma/dashboard" Component={WMADashboard} />
@@ -48,11 +55,11 @@ function App() {
           <Route exact path="/wma/schedules" Component={WMASchedules} />
           <Route exact path="/wma/profile" Component={WMAProfile} />
           <Route exact path="/wma/transactions" Component={WMATransaction} />
-          <Route
+          {/* <Route
             exact
             path="/user/smartDevice"
             Component={UserSmartDeviceRequest}
-          />
+          /> */}
 
           {/* Admin routes */}
           <Route exact path="/admin/dashboard" Component={AdminDashboard} />
@@ -67,6 +74,12 @@ function App() {
             path="/admin/transactions"
             Component={AdminTransactions}
           />
+          <Route exact path="/admin/devices" Component={AdminDevice} />
+          {/* <Route
+            exact
+            path="/admin/devices/update"
+            Component={AdminDeviceUpdate}
+          /> */}
         </Routes>
       </Router>
     </>

@@ -111,6 +111,17 @@ const UserSmartDeviceRequest = () => {
         return "";
     }
   }
+  function getDeviceTypeClassName(type) {
+    switch (type) {
+      case "Recyclable":
+        return "bg-blue-100 text-blue-800";
+      case "Non-Recyclable":
+        return "bg-orange-100 text-orange-800";
+
+      default:
+        return "";
+    }
+  }
 
   return (
     <>
@@ -148,7 +159,15 @@ const UserSmartDeviceRequest = () => {
                       className="bg-white border-b :bg-gray-800 :border-gray-700"
                       key={device._id}
                     >
-                      <td className="px-6 py-4">{device.type}</td>
+                      <td className="px-3 py-4 capitalize">
+                        <span
+                          className={`uppercase font-semibold text-[12px] px-2.5 py-0.5 rounded ${getDeviceTypeClassName(
+                            device.type
+                          )}`}
+                        >
+                          {device.type}
+                        </span>
+                      </td>
                       <td className="px-6 py-4">
                         {new Date(device.createdAt).toLocaleString()}
                       </td>

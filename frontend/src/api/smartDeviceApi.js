@@ -12,7 +12,7 @@ const createSmartDeviceRequest = async (deviceRequest) => {
 
 const getAllSmartDeviceRequests = async () => {
   try {
-    const deviceRequests = await new API().get("device", {});
+    const deviceRequests = await new API().get("smartDevices", {});
     return deviceRequests;
   } catch (error) {
     console.error("Error fetching smart device requests:", error.message);
