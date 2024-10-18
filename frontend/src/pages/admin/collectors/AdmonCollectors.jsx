@@ -8,7 +8,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { ToastContainer, toast } from "react-toastify";
-import { getAllCollectors } from '../../../api/collectorApi';
+import { deleteCollector, getAllCollectors } from '../../../api/collectorApi';
 // MUI
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -28,6 +28,7 @@ function AdminCollectors() {
   const [selectedCollectorId, setSelectedCollectorId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
+  const navigate = useNavigate();
 
 
   // const fetchAllCollectors = async () => {
@@ -74,7 +75,7 @@ function AdminCollectors() {
   }, [])
 
   const handleClickOpen = (id) => {
-    setSelectedScheduleId(id);
+    setSelectedCollectorId(id);
     setOpen(true);
   };
 
@@ -85,8 +86,8 @@ function AdminCollectors() {
   const handleDeleteCollector = async () => {
     if (selectedCollectorId) {
       try {
-        await deleteSchedule(selectedCollectorId);
-        setSchedules((currentCollector) =>
+        await deleteCollector(selectedCollectorId);
+        setCollectors((currentCollector) =>
           currentCollector.filter((collector) => collector._id !== selectedCollectorId)
         );
         handleClose();
@@ -108,6 +109,11 @@ function AdminCollectors() {
       }
     }
   };
+
+  const handleEditClick = (collector) => {
+    navigate("/admin/collectors/update", { state: { collector } });
+  };
+
 
   const filterCollectors = () => {
     let filtered = collectors;
@@ -165,7 +171,7 @@ function AdminCollectors() {
                     <GroupRemoveIcon sx={{ fontSize: 30 }}/>
                   </div>  
                 </div>
-                <span className=' text-3xl font-bold p-5'>{collectors.filter((collector) => collector.statusOfCollector === 'Unavailable').length} Collectors</span>
+                <span className=' text-3xl font-bold p-5'>{collectors.filter((collector) => collector.statusOfCollector === 'Not-Available').length} Collectors</span>
               </div>
             </div>
           </div>
@@ -183,7 +189,7 @@ function AdminCollectors() {
               >
                 <MenuItem value="">All</MenuItem>
                 <MenuItem value="Available">Available</MenuItem>
-                <MenuItem value="Unavailable">Unavailable</MenuItem>
+                <MenuItem value="Not-Available">Not-Available</MenuItem>
               </Select>
             </FormControl>
         </div>
@@ -255,7 +261,7 @@ function AdminCollectors() {
                     </td>
                     <td className="px- py-4 text-right">
                       <a
-                        // onClick={() => handleEditClick(schedule)}
+                        onClick={() => handleEditClick(collector)}
                         className="font-medium text-gray-400 :text-blue-500 cursor-pointer"
                       >
                         <EditIcon />
@@ -263,7 +269,7 @@ function AdminCollectors() {
                     </td>
                     <td className="px-3 py-4 text-right">
                       <a
-                        // onClick={() => handleClickOpen(schedule._id)}
+                        onClick={() => handleClickOpen(collector._id)}
                         className="font-medium text-red-600 :text-blue-500 cursor-pointer"
                       >
                         <DeleteIcon />

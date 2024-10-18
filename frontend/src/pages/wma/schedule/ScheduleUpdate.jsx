@@ -1,40 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ResponsiveDrawer from "../components/AdminDrawer";
+import WMADrawer from "../components/WMADrawer"
 import WmaAuthService from "../../../api/wmaApi";
 import { ToastContainer, toast } from "react-toastify";
-import { getAllCollectors } from "../../../api/collectorApi";
+import { getAllCollectors, getAllCollectorsInWma } from "../../../api/collectorApi";
 import { getAllAreas } from "../../../api/areaApi";
 import { updateSchedule } from "../../../api/scheduleApi";
 import CloseIcon from '@mui/icons-material/Close';
 
-const AdminScheduleUpdate = () => {
+const ScheduleUpdate = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [wmas, setWmas] = useState([]);
   const [collectors, setCollectors] = useState([]);
   const [filteredCollectors, setFilteredCollectors] = useState([]);
-  const [areas, setAreas] = useState([]);
   const [wma, setWma] = useState(location.state.schedule.wmaId);
   const [collector, setCollector] = useState(location.state.schedule.collectorId);
-  const [area, setArea] = useState(location.state.schedule.area);
+  const [area, setArea] = useState(location.state.schedule.area.name);
   const [date, setDate] = useState(location.state.schedule.date);
   const [time, setTime] = useState(location.state.schedule.time);
+  const [status, setStatus] = useState(location.state.schedule.status);
 
-
-  const fetchAllWmas = async () => {
+  const fetchAllCollectorsInWma = async (currentWma) => {
     try {
-      const res = await WmaAuthService.getAllWmas();
-      setWmas(res);
-    } catch (error) {
-      alert(error.message);
-      console.error("Error fetching WMAs: ", error.message);
-    }
-  };
-
-  const fetchAllCollectors = async () => {
-    try {
-      const res = await getAllCollectors();
+      const res = await getAllCollectorsInWma(currentWma._id);
       setCollectors(res);
       setFilteredCollectors(res);
     } catch (error) {
@@ -43,34 +31,17 @@ const AdminScheduleUpdate = () => {
     }
   };
 
-  const fetchAllAreas = async () => {
-    try {
-      const res = await getAllAreas();
-      setAreas(res);
-    } catch (error) {
-      alert(error.message);
-      console.error("Error fetching areas: ", error.message);
-    }
-  };
-
   useEffect(() => {
-    fetchAllWmas();
-    fetchAllCollectors();
-    fetchAllAreas();
-  },[])
-
-  const wmaChangeHandler = (e) => {
-    e.preventDefault();
-    setWma(e.target.value);
-    const fcollectors = collectors.filter((collector) => collector.wmaId === e.target.value); 
-    setFilteredCollectors(fcollectors); 
-  }
+    if (wma) {
+      fetchAllCollectorsInWma(wma);
+    }
+  }, [wma])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const body = {
-        wma, collectorId:collector, area, date, time 
+        collectorId:collector, status 
       }
       await updateSchedule(body, location.state.schedule._id);
       toast.success("schedule status updated successfully!", {
@@ -84,7 +55,7 @@ const AdminScheduleUpdate = () => {
         theme: "light",
       });
       setTimeout(() => {
-        navigate("/admin/schedules");
+        navigate("/wma/schedules");
       }, 2000);
     } catch (error) {
       console.error("Error updating garbage status:", error.message);
@@ -93,12 +64,12 @@ const AdminScheduleUpdate = () => {
   };
 
   return (
-    <ResponsiveDrawer>
+    <WMADrawer>
       <div className="grid grid-cols-1 lg:grid-cols- gap-8 p-6">
 
         {/* Form Section */}
         <div className="bg-white shadow-lg rounded-lg p-8">
-        <div className=" float-right cursor-pointer" onClick={() => navigate("/admin/schedules")}>
+        <div className=" float-right cursor-pointer" onClick={() => navigate("/wma/schedules")}>
             <CloseIcon />
         </div>
           <h2 className="text-2xl font-bold text-gray-700 mb-6">
@@ -108,17 +79,11 @@ const AdminScheduleUpdate = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div>
                 <label className="block text-gray-600 font-medium">Wast Management Authority</label>
-                <select
-                value={wma._id} 
-                onChange={(e) => wmaChangeHandler(e)}
-                className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-white">
-                    <option value="" disabled>Select Waste Management Authority</option>
-                    {wmas.map((wma)=>{
-                      return(
-                        <option key={wma._id} value={wma._id}>{wma.wmaname}</option>
-                      );
-                    })}
-                </select>
+                <input
+                type="text"
+                value={wma.wmaname} 
+                readOnly
+                className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"/>
               </div>
               <div>
                 <label className="block text-gray-600 font-medium">
@@ -140,17 +105,11 @@ const AdminScheduleUpdate = () => {
             <div className="grid grid-cols-2 gap-10">
               <div>
                 <label className="block text-gray-600 font-medium">Area</label>
-                <select
-                value={area._id} 
-                onChange={(e) => setArea(e.target.value)}
-                className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-white">
-                    <option value="" disabled>Select Collection Area</option>
-                    {areas.map((area)=>{
-                      return(
-                        <option key={area._id} value={area._id}>{area.name}</option>
-                      );
-                    })}
-                </select>
+                <input
+                type="text"
+                value={area} 
+                readOnly
+                className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"/>
               </div>
               <div>
               <label className="block text-gray-600 font-medium">
@@ -159,10 +118,10 @@ const AdminScheduleUpdate = () => {
               <input
                 type="date"
                 value={new Date(date).toISOString().split("T")[0]}
-                onChange={(e) => setDate(e.target.value)}
+                readOnly
                 min={new Date().toISOString().split("T")[0]} 
                 max={new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split("T")[0]}
-                className="mt-2 block w-full p-[10px] border border-gray-300 rounded-lg bg-white"
+                className="mt-2 block w-full p-[10px] border border-gray-300 rounded-lg bg-gray-50"
               />
               </div>
             </div>
@@ -174,22 +133,25 @@ const AdminScheduleUpdate = () => {
                 <input
                   type="time"
                   value={time}
-                  onChange={(e) => setTime(e.target.value)}
+                readOnly
                   min="09:00"
                   max="17:00" 
-                  className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-white"
+                  className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
                 />
               </div>
               <div>
                 <label className="block text-gray-600 font-medium">
                   Status
                 </label>
-                <input
-                  value={location.state.schedule.status}
-                  readOnly
-                  className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700"
-                />
-                 
+                <select
+                  value={status}
+                  onChange={(e)=> setStatus(e.target.value)}                  
+                  className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-700"
+                >
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select> 
               </div>
             </div>
             <div className="flex justify-end">
@@ -204,8 +166,8 @@ const AdminScheduleUpdate = () => {
         </div>
       </div>
       <ToastContainer />
-    </ResponsiveDrawer>
+    </WMADrawer>
   );
 };
 
-export default AdminScheduleUpdate;
+export default ScheduleUpdate;

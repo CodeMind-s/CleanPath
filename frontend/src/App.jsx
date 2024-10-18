@@ -25,7 +25,10 @@ import AdminSchedule from "./pages/admin/schedule/AdminSchedule";
 import AdminScheduleUpdate from "./pages/admin/schedule/AdminScheduleUpdate";
 import AdminScheduleCreate from "./pages/admin/schedule/AdminScheduleCreateForm";
 import AdminCollectors from "./pages/admin/collectors/AdmonCollectors";
-
+import AdminCollectorUpdate from "./pages/admin/collectors/AdminCollectorUpdate";
+import WmaCollectorUpdate from "./pages/wma/collectors/UpdateCollector";
+import WmaCollectorCreate from "./pages/wma/collectors/AddCollectors";
+import ScheduleUpdate from "./pages/wma/schedule/ScheduleUpdate";
 
 function App() {
   return (
@@ -53,6 +56,21 @@ function App() {
           {/* WMA Routes */}
           <Route exact path="/wma/dashboard" Component={WMADashboard} />
           <Route exact path="/wma/collectors" Component={WMACollectors} />
+          <Route
+            exact
+            path="/wma/collectors/update"
+            Component={WmaCollectorUpdate}
+          />
+          <Route
+            exact
+            path="/wma/collectors/create"
+            Component={WmaCollectorCreate}
+          />
+          <Route
+            exact
+            path="/wma/schedules/update"
+            Component={ScheduleUpdate}
+          />
           <Route exact path="/wma/schedules" Component={WMASchedules} />
           <Route exact path="/wma/profile" Component={WMAProfile} />
           <Route exact path="/wma/transactions" Component={WMATransaction} />
@@ -89,6 +107,11 @@ function App() {
             exact
             path="/admin/collectors"
             Component={AdminCollectors}
+          />
+          <Route
+            exact
+            path="/admin/collectors/update"
+            Component={AdminCollectorUpdate}
           />
           <Route
             exact

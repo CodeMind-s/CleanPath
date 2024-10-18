@@ -42,22 +42,20 @@ const getAllCollectorsInWma = async (id) => {
 //   }
 // };
 
-// const updateGarbage = async (status, id) => {
-//   // Ensure the body only contains the status
-//   const body = { status };
-
-//   try {
-//     const updatedGarbage = await new API().put(
-//       `garbage/${id}`, // Make sure this URL matches your API endpoint for garbage requests
-//       body
-//     );
-//     // console.log(updatedGarbage);
-//     return updatedGarbage;
-//   } catch (error) {
-//     console.error("Error updating garbage:", error.message);
-//     throw error; // Rethrow the error for the component to handle
-//   }
-// };
+const updateCollector = async (status, id) => {
+  // Ensure the body only contains the status
+  try {
+    const updatedCollector = await new API().put(
+      `collector/${id}`, // Make sure this URL matches your API endpoint for garbage requests
+      status
+    );
+    // console.log(updatedGarbage);
+    return updatedCollector;
+  } catch (error) {
+    console.error("Error updating collector:", error.message);
+    throw error; // Rethrow the error for the component to handle
+  }
+};
 
 const deleteCollector = async (id) => {
   try {
@@ -74,5 +72,6 @@ export {
     createCollector,
     getAllCollectors,
     deleteCollector,
-    getAllCollectorsInWma
+    getAllCollectorsInWma,
+    updateCollector
 };

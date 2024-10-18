@@ -61,13 +61,14 @@ const AdminScheduleCreate = () => {
     fetchAllCollectors();
     fetchAllAreas();
   },[])
-
-    const wmaChangeHandler = (e) => {
-        e.preventDefault();
-        setWma(e.target.value);
-        const fcollectors = collectors.filter((collector) => collector.wmaId === e.target.value); 
-        setFilteredCollectors(fcollectors); 
-    }
+  
+  const wmaChangeHandler = (e) => {
+    e.preventDefault();
+    const selectedWma = e.target.value;
+    setWma(selectedWma);
+    const fcollectors = collectors.filter((collector) => collector.wmaId._id === selectedWma); 
+    setFilteredCollectors(fcollectors); 
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

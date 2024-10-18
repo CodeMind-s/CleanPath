@@ -62,6 +62,20 @@ const getTruckSchedules = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @route   GET /api/schedules/wma-schedules
+ * @desc    Get all schedules assingd to the wma
+ * @access  Private (Authenticated WMA)
+ * @returns {Array} - A list of schedules assingd to the truck
+ */
+const getSchedulesByWma = asyncHandler(async (req, res) => {
+  const schedule = await Schedule.find({ wmaId: req.params.id })
+  .populate("wmaId", "wmaname")
+  .populate("collectorId", "collectorName")
+  .populate("area", "name");
+  res.json(schedule);
+});
+
+/**
  * @route   GET /api/schedule/:id
  * @desc    Get a single schedule by ID
  * @access  Private
@@ -134,4 +148,5 @@ export {
   getScheduleById,
   updateSchedule,
   deleteSchedule,
+  getSchedulesByWma,
 };

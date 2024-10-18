@@ -21,6 +21,16 @@ const getAllSchedules = async () => {
   }
 };
 
+const getAllSchedulesInWma = async (id) => {
+  try {
+    const schedule = await new API().get(`schedule/wma-schedules/${id}`, {});
+    return schedule;
+  } catch (error) {
+    console.error("Error fetching schedule:", error.message);
+    throw error; // Rethrow the error for the component to handle
+  }
+};
+
 // const getAllDriverGarbages = async () => {
 //   try {
 //     const garbages = await new API().get("garbage/driver-garbage", {});
@@ -86,4 +96,5 @@ export {
     getAllSchedules,
     updateSchedule,
     deleteSchedule,
+    getAllSchedulesInWma
 };

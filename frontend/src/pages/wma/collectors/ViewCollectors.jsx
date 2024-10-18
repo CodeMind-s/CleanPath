@@ -9,7 +9,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { ToastContainer, toast } from "react-toastify";
-import { getAllCollectorsInWma } from '../../../api/collectorApi';
+import { deleteCollector, getAllCollectorsInWma } from '../../../api/collectorApi';
 // MUI
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -30,6 +30,7 @@ function ViewCollectors() {
   const [selectedCollectorId, setSelectedCollectorId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
+  const navigate = useNavigate();
 
 
   const fetchCurrentWma = async () => {
@@ -44,7 +45,7 @@ function ViewCollectors() {
 
   useEffect(() => {
     fetchCurrentWma();
-  })
+  }, [])
 
   const fetchAllCollectorsInWma = async (currentWma) => {
     try {
@@ -65,8 +66,12 @@ function ViewCollectors() {
   }, [currentWma])
 
   const handleClickOpen = (id) => {
-    setSelectedScheduleId(id);
+    setSelectedCollectorId(id);
     setOpen(true);
+  };
+
+  const handleEditClick = (collector) => {
+    navigate("/wma/collectors/update", { state: { collector } });
   };
 
   const handleClose = () => {
@@ -76,8 +81,8 @@ function ViewCollectors() {
   const handleDeleteCollector = async () => {
     if (selectedCollectorId) {
       try {
-        await deleteSchedule(selectedCollectorId);
-        setSchedules((currentCollector) =>
+        await deleteCollector(selectedCollectorId);
+        setCollectors((currentCollector) =>
           currentCollector.filter((collector) => collector._id !== selectedCollectorId)
         );
         handleClose();
@@ -161,22 +166,35 @@ function ViewCollectors() {
             </div>
           </div>
         </div>
-        <h1 className=' pl-4 font-semibold'>Registered Collectors</h1>
+        <h1 className=' pl-4 font-semibold'>Authorized Collectors Under {currentWma.wmaname}</h1>
         <div className=' px-4 my-4 flex justify-between items-center'>
           <input onChange={(e) => setSearchFilter(e.target.value)} type='text' placeholder='Search Collector' className=' py-2 px-2  border-2 rounded-lg border-gray-400 w-[40%]'/>
-          <FormControl className="w-44">
-              <InputLabel id="type-filter-label">Filter By Status</InputLabel>
-              <Select
-                labelId="type-filter-label"
-                value={statusFilter}
-                label="Type"
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="Available">Available</MenuItem>
-                <MenuItem value="Unavailable">Unavailable</MenuItem>
-              </Select>
+          <div className=' flex justify-end items-center w-[40%]' >
+            <div className=' mr-5'>
+              <FormControl className="w-44 mr-5">
+                <InputLabel id="type-filter-label">Filter By Status</InputLabel>
+                <Select
+                  labelId="type-filter-label"
+                  value={statusFilter}
+                  label="Type"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="Available">Available</MenuItem>
+                  <MenuItem value="Unavailable">Unavailable</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <FormControl className="w-54">
+              <Button
+                className="h-14"
+                variant="contained"
+                color="success"
+                onClick={() =>{navigate("/wma/collectors/create")}}>
+                Add New Collector
+              </Button>
             </FormControl>
+          </div>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 :text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 :bg-gray-700 :text-gray-400">
@@ -184,9 +202,9 @@ function ViewCollectors() {
               <th scope="col" className="px-5 py-3">
                 Name
               </th>
-              <th scope="col" className="px-5 py-3">
+              {/* <th scope="col" className="px-5 py-3">
                 WMA
-              </th>
+              </th> */}
               <th scope="col" className="px-3 py-3">
                 Truck No
               </th>
@@ -226,9 +244,9 @@ function ViewCollectors() {
                       <span className=' pl-3'>{collector.collectorName}</span>
                     </div>
                     </th>
-                    <td className="px-5 py-4">
+                    {/* <td className="px-5 py-4">
                         {collector.wmaId? collector.wmaId.wmaname : "No wma assigned"}
-                    </td>
+                    </td> */}
                     <td className="px-5 py-4">{collector.truckNumber}</td>
                     <td className="px-5 py-4">
                       {collector.collectorNIC}
@@ -246,7 +264,7 @@ function ViewCollectors() {
                     </td>
                     <td className="px- py-4 text-right">
                       <a
-                        // onClick={() => handleEditClick(schedule)}
+                        onClick={() => handleEditClick(collector)}
                         className="font-medium text-gray-400 :text-blue-500 cursor-pointer"
                       >
                         <EditIcon />
@@ -254,7 +272,7 @@ function ViewCollectors() {
                     </td>
                     <td className="px-3 py-4 text-right">
                       <a
-                        // onClick={() => handleClickOpen(schedule._id)}
+                        onClick={() => handleClickOpen(collector._id)}
                         className="font-medium text-red-600 :text-blue-500 cursor-pointer"
                       >
                         <DeleteIcon />

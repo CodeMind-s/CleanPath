@@ -5,7 +5,8 @@ import {
     getTruckSchedules,
     getScheduleById,
     updateSchedule,
-    deleteSchedule
+    deleteSchedule,
+    getSchedulesByWma
 } from "../controllers/scheduleController.js";
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
@@ -19,6 +20,8 @@ router
   // .get(authenticate, getAllSchedules);
 
 router.route("/collector-schedules/:id").get(getTruckSchedules);
+
+router.route("/wma-schedules/:id").get(getSchedulesByWma);
 
 router
   .route("/:id")

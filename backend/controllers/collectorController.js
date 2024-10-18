@@ -15,7 +15,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 const createCollector = asyncHandler(async (req, res) => {
   const { wmaId, truckNumber, collectorName, collectorNIC, contactNo} = req.body;
 
-  if (!wmaId || !truckNumber || !collectorName || !collectorNIC || contactNo ) {
+  if (!wmaId || !truckNumber || !collectorName || !collectorNIC || !contactNo ) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }

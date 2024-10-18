@@ -1,36 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import WMADrawer from "../components/WMADrawer"
-import WmaAuthService from "../../../api/wmaApi"
+import ResponsiveDrawer from "../components/AdminDrawer";
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from '@mui/icons-material/Close';
-import { createCollector } from '../../../api/collectorApi';
+import { updateCollector } from '../../../api/collectorApi';
 
-const WmaCollectorCreate = () => {
+const AdminCollectorUpdate = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentWma, setCurrentWma] = useState([]);
-  const [truckNumber, setTruckNumber] = useState('');
-  const [collectorName, setCollectorName] = useState('');
-  const [collectorNIC, setCollectorNIC] = useState('');
-  const [contactNo, setContactNo] = useState('');
-  // const [statusOfCollector, setStatusOfCollector] = useState();
+  const [truckNumber, setTruckNumber] = useState(location.state.collector.truckNumber);
+  const [collectorName, setCollectorName] = useState(location.state.collector.collectorName);
+  const [collectorNIC, setCollectorNIC] = useState(location.state.collector.collectorNIC);
+  const [contactNo, setContactNo] = useState(location.state.collector.contactNo);
+  const [statusOfCollector, setStatusOfCollector] = useState(location.state.collector.statusOfCollector);
   const [valideForm, setValideForm] = useState(false);
   const [formError, setFormError] = useState('');
-
-  const fetchCurrentWma = async () => {
-    try {
-      const res = await WmaAuthService.getCurrentWmaDetails();
-      setCurrentWma(res);
-    } catch (error) {
-      alert(error.message);
-      console.error("Error fetching WMAs: ", error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchCurrentWma();
-  }, [])
 
   useEffect(() => {
     let isValid = true;
@@ -47,9 +31,6 @@ const WmaCollectorCreate = () => {
     } else if (truckNumber.length >= 0 && !/^[a-zA-Z0-9]*$/.test(truckNumber)) {
       setFormError('Invalid Truck Number');
       isValid = false;
-    } else if (truckNumber.length == null ) {
-      setFormError('Invalid Truck Number');
-      isValid = false;
     } else {
       setFormError('');
     }
@@ -61,10 +42,10 @@ const WmaCollectorCreate = () => {
     e.preventDefault();
     try {
       const body = {
-        wmaId: currentWma._id , truckNumber, collectorName, collectorNIC, contactNo
+        truckNumber, collectorName, collectorNIC, statusOfCollector, contactNo
       }
-      await createCollector(body);
-      toast.success("collector status added successfully!", {
+      await updateCollector(body, location.state.collector._id);
+      toast.success("collector status updated successfully!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -75,21 +56,21 @@ const WmaCollectorCreate = () => {
         theme: "light",
       });
       setTimeout(() => {
-        navigate("/wma/collectors");
+        navigate("/admin/collectors");
       }, 2000);
     } catch (error) {
-      console.error("Error adding collector status:", error.message);
-      toast.error("Failed to add collector status.");
+      console.error("Error updating collector status:", error.message);
+      toast.error("Failed to update collector status.");
     }
   };
 
   return (
-    <WMADrawer>
+    <ResponsiveDrawer>
       <div className="grid grid-cols-1 lg:grid-cols- gap-8 p-6">
 
         {/* Form Section */}
         <div className="bg-white shadow-lg rounded-lg p-8">
-        <div className=" float-right cursor-pointer" onClick={() => navigate("/wma/collectors")}>
+        <div className=" float-right cursor-pointer" onClick={() => navigate("/admin/collectors")}>
             <CloseIcon />
         </div>
           <h2 className="text-2xl font-bold text-gray-700 mb-6">
@@ -101,7 +82,7 @@ const WmaCollectorCreate = () => {
                 <label className="block text-gray-600 font-medium">Wast Management Authority</label>
                 <input
                 type="text"
-                value={currentWma.wmaname} 
+                value={location.state.collector.wmaId.wmaname} 
                 readOnly
                 className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-gray-50"/>
               </div>
@@ -167,7 +148,7 @@ const WmaCollectorCreate = () => {
                   className="mt-2 block w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-700"
                 />
               </div>
-              {/* <div>
+              <div>
                 <label className="block text-gray-600 font-medium">
                 Status
                 </label>
@@ -179,7 +160,7 @@ const WmaCollectorCreate = () => {
                   <option value="Available">Available</option>
                   <option value="Not-Available">Not-Available</option>
                   </select>
-              </div> */}
+              </div>
             </div>
             <div className=" mt-5">
               <span className=" text-red-500">{formError}</span>
@@ -191,15 +172,15 @@ const WmaCollectorCreate = () => {
                 disabled={!valideForm}
                 className={`py-3 px-8 text-white rounded-lg transition duration-200 focus:ring-4 focus:ring-green-400 ${valideForm ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-500'}`}
               >
-                Add Collector
+                Update Details
               </button>
             </div>
           </form>
         </div>
       </div>
       <ToastContainer />
-    </WMADrawer>
+    </ResponsiveDrawer>
   );
 };
 
-export default WmaCollectorCreate;
+export default AdminCollectorUpdate;
