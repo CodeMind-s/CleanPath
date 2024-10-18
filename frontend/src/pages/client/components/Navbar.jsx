@@ -1,23 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../../../assets/logo.png";
 
 const Navbar = () => {
   return (
     <>
-      <nav className="bg-white border-gray-200 :bg-gray-900">
+      <nav className="rounded-b-xl border-gray-200 :bg-gray-900 sticky top-0 backdrop-blur-lg">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
-            href="https://flowbite.com/"
+            href={"#"}
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="h-8"
-              alt="Flowbite Logo"
-            />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap :text-white">
-              Flowbite
-            </span>
+            <img src={logo} className="h-8" alt="Flowbite Logo" />
           </a>
           <button
             data-collapse-toggle="navbar-default"
@@ -45,10 +39,10 @@ const Navbar = () => {
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <ul className="font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white :bg-gray-800 md::bg-gray-900 :border-gray-700">
-              <li>
+              {/* <li>
                 <a
                   href="#"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 :text-white md::text-blue-500"
+                  className="block py-2 px-3 text-white bg-green-700 rounded md:bg-transparent md:text-green-700 md:p-0 :text-white md::text-green-500"
                   aria-current="page"
                 >
                   Home
@@ -57,7 +51,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 :text-white md::hover:text-blue-500 :hover:bg-gray-700 :hover:text-white md::hover:bg-transparent"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 :text-white md::hover:text-green-500 :hover:bg-gray-700 :hover:text-white md::hover:bg-transparent"
                 >
                   About
                 </a>
@@ -65,22 +59,22 @@ const Navbar = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 :text-white md::hover:text-blue-500 :hover:bg-gray-700 :hover:text-white md::hover:bg-transparent"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 :text-white md::hover:text-green-500 :hover:bg-gray-700 :hover:text-white md::hover:bg-transparent"
                 >
                   Contact
                 </a>
-              </li>
+              </li> */}
               <div className="flex gap-3">
                 <li>
                   <Link to={"/login"}>
-                    <button className=" text-blue-600 px-4 py-2 rounded-lg border border-blue-600 ">
+                    <button className=" text-green-600 px-4 py-2 rounded-lg border border-green-600 ">
                       Sign In
                     </button>
                   </Link>
                 </li>
                 <li>
                   <Link to={"/register"}>
-                    <button className="text-white bg-blue-600 px-4 py-2 rounded-lg ">
+                    <button className="text-white bg-green-600 px-4 py-2 rounded-lg ">
                       Sign Up
                     </button>
                   </Link>
