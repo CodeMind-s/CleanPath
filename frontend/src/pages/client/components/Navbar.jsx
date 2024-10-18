@@ -5,7 +5,7 @@ import logo from "../../../assets/logo.png";
 const Navbar = () => {
   return (
     <>
-      <nav className="rounded-b-xl border-gray-200 :bg-gray-900 sticky top-0 backdrop-blur-lg">
+      <nav className="rounded-b-xl border-gray-200 :bg-gray-900 sticky top-0 backdrop-blur-lg z-50">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href={"#"}
@@ -38,7 +38,7 @@ const Navbar = () => {
             </svg>
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white :bg-gray-800 md::bg-gray-900 :border-gray-700">
+            <ul className="font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg- :bg-gray-800 md::bg-gray-900 :border-gray-700">
               {/* <li>
                 <a
                   href="#"
@@ -64,10 +64,10 @@ const Navbar = () => {
                   Contact
                 </a>
               </li> */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 ">
                 <li>
                   <Link to={"/login"}>
-                    <button className=" text-green-600 px-4 py-2 rounded-lg border border-green-600 ">
+                    <button className="bg-white text-green-600 px-4 py-2 rounded-lg border-2 border-green-600 ">
                       Sign In
                     </button>
                   </Link>
