@@ -80,7 +80,7 @@ const UpdateGarbageScreen = () => {
 
         const newTransaction = {
           userID: bin.userId?._id,
-          description: `Garbage Collection Bin - ${bin.type}`,
+          description: `Garbage Collection Bin: ${bin.type === "non-recyclable" ? "Non-Recyclable" : "Recyclable"}`,
           isRefund: false,
           isPaid: false,
           amount: amount,
