@@ -27,7 +27,7 @@ const smartDeviceSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Collected", "In Progress"],
+      enum: ["Pending", "Distributed", "In Progress"],
       default: "Pending",
     },
     garbageStatus: {

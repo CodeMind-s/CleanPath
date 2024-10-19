@@ -104,14 +104,12 @@ const getSmartDeviceById = asyncHandler(async (req, res) => {
  * @returns {Object} - The updated smart device object
  */
 const updateSmartDevice = asyncHandler(async (req, res) => {
-  const { type, latitude, longitude } = req.body;
+  const { status } = req.body;
 
   const device = await SmartDevice.findById(req.params.id);
 
   if (device) {
-    device.type = type || device.type;
-    device.latitude = latitude || device.latitude;
-    device.longitude = longitude || device.longitude;
+    device.status = status || device.status;
 
     const updatedDevice = await device.save();
     res.json(updatedDevice);
