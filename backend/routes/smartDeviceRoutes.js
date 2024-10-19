@@ -4,6 +4,7 @@ import {
   getAllSmartDevices,
   getSmartDeviceById,
   updateSmartDevice,
+  updateGarbageStatusByID,
   deleteSmartDevice,
   getUserSmartDevices,
 } from "../controllers/smartDeviceController.js";
@@ -20,10 +21,12 @@ router
 // Route for getting smart devices created by the authenticated user
 router.route("/my-devices").get(authenticate, getUserSmartDevices); // Only authenticated users can access their own smart devices
 
+router.route("/device/:id").put(updateGarbageStatusByID); // Only admins can update garbage status
+
 // Route for getting, updating, and deleting a specific smart device by ID
 router
   .route("/:id")
-  .get(authenticate, getSmartDeviceById) // Authenticated users can get a smart device by ID
+  .get(getSmartDeviceById) // Authenticated users can get a smart device by ID
   .put(authenticate, authorizeAdmin, updateSmartDevice) // Only admins can update a smart device
   .delete(authenticate, authorizeAdmin, deleteSmartDevice); // Only admins can delete a smart device
 
