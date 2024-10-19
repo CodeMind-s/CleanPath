@@ -140,6 +140,12 @@ const deleteGarbageRequest = asyncHandler(async (req, res) => {
   }
 });
 
+const getGarbageRequestByArea = asyncHandler(async (req, res) => {
+  const garbage = await Garbage.find({ area: req.params.id })
+  .populate("area", "name")
+  res.json(garbage);
+});
+
 export {
   createGarbageRequest,
   getAllGarbageRequests,
@@ -147,4 +153,5 @@ export {
   getGarbageRequestById,
   updateGarbageRequest,
   deleteGarbageRequest,
+  getGarbageRequestByArea
 };
