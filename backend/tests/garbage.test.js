@@ -17,10 +17,10 @@ describe("GET /api/garbage/", () => {
 describe("POST /api/garbage/", () => {
   it("should create a garbage request", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3Mjg4ODIxMTEsImV4cCI6MTczMTQ3NDExMX0.C1tHiWxr7YUCvLcFtsc4ct-4-8hud2g8j8x9GyrINeU"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
     const res = await request(app)
       .post("/api/garbage/")
-      .set("Cookie", [`jwt=${token}`])
+      .set("Authorization", `Bearer ${token}`)
       .send({
         longitude: 79.3211,
         latitude: 6.3216,
@@ -49,7 +49,7 @@ describe("POST /api/garbage/", () => {
 
   it("should fail to create a garbage request with invalid data", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3Mjg4ODIxMTEsImV4cCI6MTczMTQ3NDExMX0.C1tHiWxr7YUCvLcFtsc4ct-4-8hud2g8j8x9GyrINeU"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
     const res = await request(app)
       .post("/api/garbage/")
       .set("Authorization", `Bearer ${token}`)
