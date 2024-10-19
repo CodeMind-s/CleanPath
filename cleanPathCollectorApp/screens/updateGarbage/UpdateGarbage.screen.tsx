@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, TextInput } from 'reac
 import React, { useEffect, useState } from 'react'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import { get, put, post } from '@/helpers/api'; // Assuming you have a 'post' method for creating transactions
+import { Ionicons } from '@expo/vector-icons';
 
 interface BinProps {
   _id: string;
@@ -29,7 +30,7 @@ interface AreaProps {
 const UpdateGarbageScreen = () => {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
-  const [gStatus, setGStatus] = useState('Pending');
+  const [gStatus, setGStatus] = useState('');
   const [bin, setBin] = useState<BinProps | null>(null);
   const [weight, setWeight] = useState<number | null>(null); // State for garbage weight
 
@@ -92,7 +93,7 @@ const UpdateGarbageScreen = () => {
       await put(`smartDevices/device/${id}`, { garbageStatus: newStatus, weight: weight ?? undefined });
       Alert.alert(
         'Status Updated',
-        'The status has been successfully updated.',
+        'The status has been successfully updated. The user will be notified. Thank you!',
         [{ text: 'OK', onPress: () => router.push({ pathname: '/dashboard' }) }]
       );
     } catch (error) {
@@ -109,11 +110,17 @@ const UpdateGarbageScreen = () => {
     <ScrollView className="flex-1 bg-gray-100">
       <View className="p-6">
         <View className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <Text className="text-xl font-semibold text-gray-800 mb-4">
-            Smart Device Details
-          </Text>
+          <View className="flex gap-2">
+            <View className="bg-[#e3fbcd] rounded-full w-10 h-10 p-2">
+              <Ionicons name="trash" size={22} color="#64903c" />
+            </View>
+            <Text className="text-xl font-bold text-primary mb-4 uppercase">
+              Smart Bin Details
+            </Text>
+          </View>
           {bin && (
             <View className="space-y-2">
+
               <Text className="text-gray-600 text-md">
                 <Text className="font-medium">Name:</Text> {bin?.userId?.username || 'N/A'}
               </Text>
@@ -121,20 +128,22 @@ const UpdateGarbageScreen = () => {
                 <Text className="font-medium">Contact:</Text> {bin?.userId?.contact || 'N/A'}
               </Text>
               <Text className="text-gray-600 text-md">
-                <Text className="font-medium">Bin Type:</Text> {bin?.type}
-              </Text>
-              <Text className="text-gray-600 text-md">
                 <Text className="font-medium">Address:</Text> {bin?.userId?.address || 'N/A'}
               </Text>
-              <Text className="text-gray-600 text-md">
-                <Text className="font-medium">Area:</Text> {bin?.area?.name}
+              <Text className={bin?.type === "non-recyclable" ? `text-orange-600 text-md font-bold uppercase` : `text-green-600 text-md font-bold uppercase`}>
+                <Text className="font-medium text-gray-600 capitalize">Bin Type:</Text> {bin?.type === "non-recyclable" ? "Non-Recyclable" : "Recyclable"}
               </Text>
-              <Text className="text-gray-600 text-md ">
-                <Text className="font-medium">Rate:</Text> LKR {bin?.area?.rate}.00
-              </Text>
-              <Text className="text-gray-600 text-md ">
-                <Text className="font-medium">Area Type:</Text> {bin?.area?.type}
-              </Text>
+              <View className="bg-gray-100 p-3 rounded-lg space-y-2">
+                <Text className="text-gray-600 text-md">
+                  <Text className="font-medium">Area:</Text> {bin?.area?.name}
+                </Text>
+                <Text className="text-gray-600 text-md ">
+                  <Text className="font-medium">Rate:</Text> LKR {bin?.area?.rate}.00
+                </Text>
+                <Text className={bin?.area?.type === "flat" ? `text-indigo-600 font-bold uppercase` : `text-teal-500 font-bold uppercase`}>
+                  <Text className="font-medium text-gray-600 capitalize">Area Type:</Text> {bin?.area?.type === "flat" ? "Flat Rate" : "Weight Based"}
+                </Text>
+              </View>
             </View>
           )}
         </View>
@@ -156,21 +165,16 @@ const UpdateGarbageScreen = () => {
         )}
 
         <View className="bg-white rounded-lg shadow-md p-6">
-          <Text className="text-lg font-semibold text-gray-800 mb-4">
-            Current Status: <Text className="text-yellow-500">{gStatus}</Text>
-          </Text>
-          <View className="flex-row justify-between">
+          {bin && (
+            <Text className="text-md font-medium text-gray-800 mb-4">
+              Current Status: <Text className={bin.garbageStatus === "Collected" ? `text-green-500 font-bold text-lg` : `text-yellow-500 font-bold text-lg`}>{bin.garbageStatus}</Text>
+            </Text>)}
+          <View className="w-full">
             <TouchableOpacity
               className="bg-green-100 py-2 px-6 border border-green-600 rounded-md"
               onPress={() => handleStatusUpdate("Collected")}
             >
-              <Text className="text-green-700 font-bold text-lg">Collected</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="bg-red-100 py-2 px-6 rounded-md border border-red-600"
-              onPress={() => handleStatusUpdate("Cancelled")}
-            >
-              <Text className="text-red-500 font-bold text-lg">Cancelled</Text>
+              <Text className="text-primary font-bold text-center text-md uppercase">Mark as collected</Text>
             </TouchableOpacity>
           </View>
         </View>
