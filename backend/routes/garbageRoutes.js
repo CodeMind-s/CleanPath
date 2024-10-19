@@ -23,8 +23,8 @@ router.route("/garbage-requests").get(authenticate, getUserGarbageRequests);
 // Routes to get, update, and delete a garbage request by ID
 router
   .route("/:id")
-  .get(authenticate, getGarbageRequestById)
-  .put(authenticate, authorizeAdmin, updateGarbageRequest)
+  .get(getGarbageRequestById)
+  .put(updateGarbageRequest)
   .delete(authenticate, deleteGarbageRequest);
 
 export default router;
