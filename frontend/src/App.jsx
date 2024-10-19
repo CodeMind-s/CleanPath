@@ -12,6 +12,7 @@ import UserTransactionHistory from "./pages/client/transaction/UserTransactionHi
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminGarbage from "./pages/admin/garbage/AdminGarbage";
 import AdminTransactions from "./pages/admin/transactions/AdminTransactions";
+import UserSmartDeviceRequest from "./pages/client/smartDevice/UserSmartDeviceRequest";
 import AdminGarbageUpdate from "./pages/admin/garbage/AdminGarbageUpdate";
 import AdminUsers from "./pages/admin/users/AdminUsers";
 import AdminWMAs from "./pages/admin/wmas/AdminWMAs";
@@ -29,6 +30,8 @@ import AdminCollectorUpdate from "./pages/admin/collectors/AdminCollectorUpdate"
 import WmaCollectorUpdate from "./pages/wma/collectors/UpdateCollector";
 import WmaCollectorCreate from "./pages/wma/collectors/AddCollectors";
 import ScheduleUpdate from "./pages/wma/schedule/ScheduleUpdate";
+import AdminDevice from "./pages/admin/device/AdminDevice";
+import AdminDeviceUpdate from "./pages/admin/device/AdminDeviceUpdate";
 
 function App() {
   return (
@@ -52,6 +55,11 @@ function App() {
             path="/user/my-transaction/history"
             Component={UserTransactionHistory}
           />
+          <Route
+            exact
+            path="/user/smartDevice"
+            Component={UserSmartDeviceRequest}
+          />
 
           {/* WMA Routes */}
           <Route exact path="/wma/dashboard" Component={WMADashboard} />
@@ -66,7 +74,8 @@ function App() {
             path="/wma/collectors/create"
             Component={WmaCollectorCreate}
           />
-          <Route
+          <Route exact path="/wma/transactions" Component={WMATransaction} />
+          {/* <Route
             exact
             path="/wma/schedules/update"
             Component={ScheduleUpdate}
@@ -88,11 +97,7 @@ function App() {
             path="/admin/transactions"
             Component={AdminTransactions}
           />
-          <Route
-            exact
-            path="/admin/schedules"
-            Component={AdminSchedule}
-          />
+          <Route exact path="/admin/schedules" Component={AdminSchedule} />
           <Route
             exact
             path="/admin/schedules/update"
@@ -103,22 +108,20 @@ function App() {
             path="/admin/schedules/create"
             Component={AdminScheduleCreate}
           />
-          <Route
-            exact
-            path="/admin/collectors"
-            Component={AdminCollectors}
-          />
+          <Route exact path="/admin/collectors" Component={AdminCollectors} />
           <Route
             exact
             path="/admin/collectors/update"
             Component={AdminCollectorUpdate}
           />
+          <Route exact path="/admin/users" Component={AdminUsers} />
+          <Route exact path="/admin/wmas" Component={AdminWMAs} />
+          <Route exact path="/admin/devices" Component={AdminDevice} />
           <Route
             exact
-            path="/admin/users"
-            Component={AdminUsers}
+            path="/admin/devices/update"
+            Component={AdminDeviceUpdate}
           />
-          <Route exact path="/admin/wmas" Component={AdminWMAs} />
         </Routes>
       </Router>
     </>
