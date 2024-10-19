@@ -1,67 +1,129 @@
 import request from "supertest";
 import app from "../index"; // Ensure this points to where your Express app is exported
 
+// Test suite for GET /api/garbage/
 describe("GET /api/garbage/", () => {
+  // Test case: Should return all garbage requests
   it("returns the garbages created", async () => {
     const res = await request(app).get("/api/garbage/");
+
+    // Check for successful response status
     expect(res.statusCode).toBe(200);
-    expect(res.body); // Assuming your API returns a token
+
+    // Expect a response body (assuming it's a list of garbages)
+    expect(res.body); // Add more specific checks based on your API's response structure
   });
 
+  // Test case: Should return 404 for an invalid endpoint
   it("returns 404 for an invalid endpoint", async () => {
     const res = await request(app).get("/api/invalid-endpoint/");
+
+    // Expect 404 Not Found for invalid route
     expect(res.statusCode).toBe(404);
   });
 });
 
+// Test suite for POST /api/garbage/
 describe("POST /api/garbage/", () => {
+  // Test case: Should create a new garbage request with valid data
   it("should create a garbage request", async () => {
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+
     const res = await request(app)
       .post("/api/garbage/")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Authorization", `Bearer ${token}`) // Set Authorization header
       .send({
         longitude: 79.3211,
         latitude: 6.3216,
         type: "Recyclable",
-        address: "Px",
-        area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
+        address: "Px Px New York",
+        area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID
       });
 
-    // Expect a successful creation
+    // Check for successful creation status
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty("_id"); // Assuming the response contains an ID or other fields
+
+    // Expect the response to contain a newly created garbage request ID
+    expect(res.body).toHaveProperty("_id");
   });
 
+  // Test case: Should fail to create a garbage request without a token
   it("should fail to create a garbage request without a token", async () => {
     const res = await request(app).post("/api/garbage/").send({
       longitude: 79.3211,
       latitude: 6.3216,
       type: "Recyclable",
-      address: "Px",
-      area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
+      address: "Px New York",
+      area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID
     });
 
-    // Expect an unauthorized error
-    expect(res.statusCode).toBe(500);
+    // Expect a failure due to missing authorization token
+    expect(res.statusCode).toBe(500); // Adjust the status code based on your error handling (401 Unauthorized would be ideal)
   });
 
+  // Test case: Should fail to create a garbage request with invalid data
   it("should fail to create a garbage request with invalid data", async () => {
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+
     const res = await request(app)
       .post("/api/garbage/")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Authorization", `Bearer ${token}`) // Set Authorization header
       .send({
-        longitude: "invalid", // Invalid longitude
+        longitude: "invalid", // Invalid longitude format (should be a number)
         latitude: 6.3216,
         type: "Recyclable",
         address: "Px",
-        area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
+        area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID
       });
 
-    // Expect a bad request error
-    expect(res.statusCode).toBe(500);
+    // Expect a failure due to invalid data
+    expect(res.statusCode).toBe(500); // Adjust status code based on your validation handling (400 Bad Request might be ideal)
+  });
+});
+
+// Test suite for DELETE /api/garbage/:id
+describe("DELETE /api/garbage/:id", () => {
+  // Test case: Should successfully delete a garbage request
+  it("should delete a garbage request", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+    const garbageId = "6713755dbc1dd9c7ca959d06"; // Replace with a valid garbage ID
+
+    const res = await request(app)
+      .delete(`/api/garbage/${garbageId}`)
+      .set("Authorization", `Bearer ${token}`); // Set Authorization header
+
+    // Expect successful deletion status
+    expect(res.statusCode).toBe(200);
+
+    // Expect a success message confirming the deletion
+    expect(res.body).toHaveProperty("message", "Garbage removed successfully!");
+  });
+
+  // Test case: Should fail to delete a garbage request without a token
+  it("should fail to delete a garbage request without a token", async () => {
+    const garbageId = "6713755dbc1dd9c7ca959d06"; // Replace with a valid garbage ID
+
+    const res = await request(app).delete(`/api/garbage/${garbageId}`);
+
+    // Expect a failure due to missing authorization token
+    expect(res.statusCode).toBe(500); // Adjust based on your error handling (401 Unauthorized would be ideal)
+  });
+
+  // Test case: Should fail to delete a garbage request with an invalid ID
+  it("should fail to delete a garbage request with an invalid ID", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+
+    const invalidId = "67136163761e1471asdasdqed4cd5ce6"; // Invalid garbage ID
+
+    const res = await request(app)
+      .delete(`/api/garbage/${invalidId}`)
+      .set("Authorization", `Bearer ${token}`); // Set Authorization header
+
+    // Expect a failure due to invalid ID (garbage request not found)
+    expect(res.statusCode).toBe(500); // Adjust based on your error handling (404 Not Found might be ideal)
   });
 });
