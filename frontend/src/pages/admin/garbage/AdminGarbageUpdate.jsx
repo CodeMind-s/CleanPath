@@ -31,7 +31,7 @@ const AdminGarbageUpdate = () => {
 
       const newTransaction = {
         userID: location.state.garbage.user._id,
-        description: `Garbage Collection - ${location.state.garbage.type}`,
+        description: `Garbage Collection: - ${location.state.garbage.type}`,
         isRefund: false,
         isPaid: false,
         amount: amount,
