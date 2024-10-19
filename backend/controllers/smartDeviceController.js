@@ -84,7 +84,7 @@ const getUserSmartDevices = asyncHandler(async (req, res) => {
 const getSmartDeviceById = asyncHandler(async (req, res) => {
   const device = await SmartDevice.findById(req.params.id)
     .populate("userId", "username email contact address")
-    .populate("area", "name location");
+    .populate("area", "name type rate");
 
   if (device) {
     res.json(device);
@@ -120,6 +120,30 @@ const updateSmartDevice = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @route   PATCH /api/smartDevices/:id/garbageStatus
+ * @desc    Update the garbage status of a smart device
+ * @access  Private/Admin
+ * @param   {String} garbageStatus - The new garbage status of the device
+ * @returns {Object} - The updated smart device object
+ */
+const updateGarbageStatusByID = asyncHandler(async (req, res) => {
+  const { garbageStatus } = req.body;
+
+  // console.log(`req.param.id => `, req.params.id);
+  const device = await SmartDevice.findById(req.params.id);
+
+  if (device) {
+    device.garbageStatus = garbageStatus || device.garbageStatus;
+
+    const updatedDevice = await device.save();
+    res.json(updatedDevice);
+  } else {
+    res.status(404);
+    throw new Error("Smart device not found");
+  }
+});
+
+/**
  * @route   DELETE /api/smartDevices/:id
  * @desc    Delete a smart device (Admin only)
  * @access  Private/Admin
@@ -142,5 +166,6 @@ export {
   getUserSmartDevices,
   getSmartDeviceById,
   updateSmartDevice,
+  updateGarbageStatusByID,
   deleteSmartDevice,
 };

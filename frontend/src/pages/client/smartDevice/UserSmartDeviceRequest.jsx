@@ -47,6 +47,7 @@ const UserSmartDeviceRequest = () => {
     fetchAllSmartDevices();
   }, []);
 
+  console.log(`smart => `, smartDevices);
   const handleClickOpen = (id) => {
     setSelectedDeviceId(id);
     setOpen(true);
@@ -103,8 +104,10 @@ const UserSmartDeviceRequest = () => {
     switch (status) {
       case "Pending":
         return "bg-yellow-100 text-yellow-800";
-      case "Active":
+      case "Collected":
         return "bg-green-100 text-green-800";
+      case "Distributed":
+        return "bg-blue-100 text-blue-800";
       case "Inactive":
         return "bg-red-100 text-red-800";
       default:
@@ -143,7 +146,10 @@ const UserSmartDeviceRequest = () => {
                   Date Requested
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Status
+                  Bin Status
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Garbage Status
                 </th>
                 <th scope="col" className="px-3 py-4 text-right">
                   <span className="sr-only"></span>
@@ -178,6 +184,15 @@ const UserSmartDeviceRequest = () => {
                           )}`}
                         >
                           {device.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 capitalize">
+                        <span
+                          className={`uppercase font-semibold text-[12px] px-2.5 py-0.5 rounded ${getStatusClassName(
+                            device.garbageStatus
+                          )}`}
+                        >
+                          {device.garbageStatus}
                         </span>
                       </td>
                       <td className="px-3 py-4 text-right">
