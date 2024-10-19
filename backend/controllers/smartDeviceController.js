@@ -42,6 +42,7 @@ const createSmartDevice = asyncHandler(async (req, res) => {
     latitude,
     type,
     area,
+    address,
   });
 
   const createdDevice = await smartDevice.save();
@@ -56,7 +57,7 @@ const createSmartDevice = asyncHandler(async (req, res) => {
  */
 const getAllSmartDevices = asyncHandler(async (req, res) => {
   const devices = await SmartDevice.find({})
-    .populate("userId", "username email")
+    .populate("userId", "username email contact address")
     .populate("area", "name location");
   res.json(devices);
 });
@@ -69,7 +70,7 @@ const getAllSmartDevices = asyncHandler(async (req, res) => {
  */
 const getUserSmartDevices = asyncHandler(async (req, res) => {
   const devices = await SmartDevice.find({ userId: req.user._id })
-    .populate("userId", "username email")
+    .populate("userId", "username email contact address")
     .populate("area", "name location");
 
   res.json(devices);
@@ -83,7 +84,7 @@ const getUserSmartDevices = asyncHandler(async (req, res) => {
  */
 const getSmartDeviceById = asyncHandler(async (req, res) => {
   const device = await SmartDevice.findById(req.params.id)
-    .populate("userId", "username email")
+    .populate("userId", "username email contact address")
     .populate("area", "name location");
 
   if (device) {

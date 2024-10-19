@@ -355,10 +355,12 @@ const AdminDevice = () => {
                       scope="row"
                       className="px-5 py-4 font-medium text-gray-900 whitespace-nowrap :text-white"
                     >
-                      {device.user ? device.user.username : "No user assigned"}
+                      {device.userId
+                        ? device.userId.username
+                        : "No user assigned"}
                     </th>
                     <td className="px-5 py-4">
-                      {device.user ? device.user.contact : ""}
+                      {device.userId ? device.userId.contact : ""}
                     </td>
                     <td className="px-3 py-4 capitalize">
                       <span
@@ -374,7 +376,7 @@ const AdminDevice = () => {
                       &nbsp;
                     </td>
                     <td className="px-5 py-4">
-                      {device.user ? device.user.address : ""}
+                      {device.userId ? device.userId.address : ""}
                     </td>
                     <td className="px-5 py-4">
                       {" "}

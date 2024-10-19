@@ -31,7 +31,7 @@ import WmaCollectorUpdate from "./pages/wma/collectors/UpdateCollector";
 import WmaCollectorCreate from "./pages/wma/collectors/AddCollectors";
 import ScheduleUpdate from "./pages/wma/schedule/ScheduleUpdate";
 import AdminDevice from "./pages/admin/device/AdminDevice";
-// import AdminDeviceUpdate from "./pages/admin/device/AdminDeviceUpdate";
+import AdminDeviceUpdate from "./pages/admin/device/AdminDeviceUpdate";
 
 function App() {
   return (
@@ -117,11 +117,11 @@ function App() {
           <Route exact path="/admin/users" Component={AdminUsers} />
           <Route exact path="/admin/wmas" Component={AdminWMAs} />
           <Route exact path="/admin/devices" Component={AdminDevice} />
-          {/* <Route
+          <Route
             exact
             path="/admin/devices/update"
             Component={AdminDeviceUpdate}
-          /> */}
+          />
         </Routes>
       </Router>
     </>
