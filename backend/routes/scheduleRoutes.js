@@ -8,7 +8,7 @@ import {
     deleteSchedule,
     getSchedulesByWma
 } from "../controllers/scheduleController.js";
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+import { authenticate, authorizeAdmin, authenticateCollector } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router
   // .post(authenticate, authorizeAdmin, createSchedule)
   // .get(authenticate, getAllSchedules);
 
-router.route("/collector-schedules/:id").get(getTruckSchedules);
+router.route("/collector-schedules").get(authenticateCollector,getTruckSchedules);
 
 router.route("/wma-schedules/:id").get(getSchedulesByWma);
 

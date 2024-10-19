@@ -10,7 +10,7 @@ const smartDeviceSchema = mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["recyclable", "non-recyclable"], // Enumerated values
+      enum: ["recyclable", "non-recyclable"],
     },
     area: {
       type: mongoose.Schema.Types.ObjectId,
