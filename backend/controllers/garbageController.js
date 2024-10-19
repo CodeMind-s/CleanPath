@@ -43,7 +43,8 @@ const createGarbageRequest = asyncHandler(async (req, res) => {
   const createdGarbage = await garbage.save();
 
   try {
-    await user.save();
+    // console.log(`createdGarbage => `, createdGarbage);
+    // await user.save();
     res.status(201).json(createdGarbage);
   } catch (error) {
     res.status(500);
