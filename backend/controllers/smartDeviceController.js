@@ -42,7 +42,6 @@ const createSmartDevice = asyncHandler(async (req, res) => {
     latitude,
     type,
     area,
-    address,
   });
 
   const createdDevice = await smartDevice.save();
