@@ -327,9 +327,9 @@ const AdminGarbage = () => {
               <th scope="col" className="px-5 py-3">
                 Area
               </th>
-              <th scope="col" className="px-5 py-3">
+              {/* <th scope="col" className="px-5 py-3">
                 Address
-              </th>
+              </th> */}
               <th scope="col" className="px-5 py-3">
                 Date Requested
               </th>
@@ -387,16 +387,16 @@ const AdminGarbage = () => {
                         {garbage.area.type === "weightBased" ? "W" : "F"}
                       </span>
                     </td>
-                    <td className="px-5 py-4">
+                    {/* <td className="px-5 py-4">
                       {garbage.user ? garbage.user.address : ""}
-                    </td>
+                    </td> */}
                     <td className="px-5 py-4">
                       {" "}
                       {new Date(garbage.createdAt).toLocaleString()}
                     </td>
                     <td className="px-5 py-4 capitalize">
                       <span
-                        className={`uppercase font-semibold text-[12px] px-2.5 py-1 rounded-full ${getStatusClassName(
+                        className={`uppercase font-semibold text-[10px] px-2.5 py-1 rounded-full ${getStatusClassName(
                           garbage.status
                         )}`}
                       >
@@ -404,12 +404,14 @@ const AdminGarbage = () => {
                       </span>
                     </td>
                     <td className="px- py-4 text-right">
-                      <a
-                        onClick={() => handleEditClick(garbage)}
-                        className="font-medium text-gray-400 :text-blue-500 cursor-pointer"
-                      >
-                        <EditIcon />
-                      </a>
+                      {garbage.status !== "Collected" && (
+                        <a
+                          onClick={() => handleEditClick(garbage)}
+                          className="font-medium text-gray-400 :text-blue-500 cursor-pointer"
+                        >
+                          <EditIcon />
+                        </a>
+                      )}
                     </td>
                     <td className="px-3 py-4 text-right">
                       <a

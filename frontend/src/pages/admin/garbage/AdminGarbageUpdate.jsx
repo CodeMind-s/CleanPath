@@ -162,7 +162,7 @@ const AdminGarbageUpdate = () => {
                 >
                   <option value="Pending">Pending</option>
                   <option value="In Progress">In Progress</option>
-                  <option value="Collected">Collected</option>
+                  {/* <option value="Collected">Collected</option> */}
                 </select>
               </div>
             </div>

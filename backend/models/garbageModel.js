@@ -35,7 +35,7 @@ const garbageSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Collected", "In Progress"],
+      enum: ["Pending", "Collected", "In Progress", "Cancelled"],
       default: "Pending",
     },
   },

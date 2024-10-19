@@ -30,6 +30,11 @@ const smartDeviceSchema = mongoose.Schema(
       enum: ["Pending", "Collected", "In Progress"],
       default: "Pending",
     },
+    garbageStatus: {
+      type: String,
+      enum: ["Pending", "Collected"],
+      default: "Pending",
+    },
   },
   { timestamps: true }
 );

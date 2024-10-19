@@ -86,10 +86,9 @@ const getUserGarbageRequests = asyncHandler(async (req, res) => {
  * @returns {Object} - A single garbage request
  */
 const getGarbageRequestById = asyncHandler(async (req, res) => {
-  const garbage = await Garbage.findById(req.params.id).populate(
-    "user",
-    "username email"
-  );
+  const garbage = await Garbage.findById(req.params.id)
+    .populate("user", "username email contact address")
+    .populate("area", "name type rate");
 
   if (garbage) {
     res.json(garbage);
