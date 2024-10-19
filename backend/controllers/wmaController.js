@@ -184,6 +184,7 @@ const getCurrentWMAProfile = asyncHandler(async (req, res) => {
  */
 
 const updateCurrentWMAProfile = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const wma = await WMA.findById(req.wma._id);
 
   if (wma) {

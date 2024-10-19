@@ -80,8 +80,9 @@ class WmaAuthService {
   }
 
   async updateWma(wmaProfileData) {
+    console.log(wmaProfileData);
     try {
-      const response = await this.api.put("wmas/profile", wmaProfileData, {
+      const response = await this.api.put("wmas/wmaprofile", wmaProfileData, {
         withCredentials: true,
       });
       return response.data;
@@ -94,9 +95,7 @@ class WmaAuthService {
   async logoutCurrentWma() {
     try {
       const response = await this.api.post("wmas/logout");
-      // console.log(`response => `, response);
-      // alert(response.message); // Display the success message
-      // Perform any additional actions like redirecting the user to the login page
+     
     } catch (error) {
       console.error("Error logging out:", error);
     }

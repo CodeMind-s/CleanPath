@@ -245,7 +245,7 @@ const AdminDevice = () => {
               >
                 <MenuItem value="">All</MenuItem>
                 <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Collected">Provided</MenuItem>
+                <MenuItem value="Distributed">Distributed</MenuItem>
                 <MenuItem value="In Progress">In Progress</MenuItem>
               </Select>
             </FormControl>

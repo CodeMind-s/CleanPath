@@ -156,7 +156,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
  * @throws  {500} If a server error occurs
  */
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).populate("area", "_id name");
   if (user) {
     res.json({
       _id: user._id,
@@ -224,7 +224,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.json({
-      _id: updatedUser._id,
+      // _id: updatedUser._id,
       username: updatedUser.username,
       address: updatedUser.address,
       area: updatedUser.area,

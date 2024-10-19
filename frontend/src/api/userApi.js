@@ -37,10 +37,7 @@ class AuthService {
   async getCurrentUserDetails() {
     try {
       const response = await this.api.get(
-        "users/profile", // Assuming 'me' is the endpoint for fetching the current user profile
-        {
-          withCredentials: true, // Ensure cookies are sent with the request
-        }
+        "users/profile", {}// Assuming 'me' is the endpoint for fetching the current user profil
       );
 
       // console.log(`Current User response => `, response); // Log the response data
@@ -80,10 +77,10 @@ class AuthService {
   }
 
   async updateUser(profileData) {
+    console.log("profileData",profileData);
     try {
-      const response = await this.api.put("users/profile", profileData, {
-        withCredentials: true,
-      });
+      const response = await this.api.put("users/profile", profileData);
+      console.log("response in update user",response.data);
       return response.data;
     } catch (error) {
       console.error("Error updating user profile:", error);
