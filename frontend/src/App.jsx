@@ -75,7 +75,7 @@ function App() {
             Component={WmaCollectorCreate}
           />
           <Route exact path="/wma/transactions" Component={WMATransaction} />
-          {/* <Route
+         <Route
             exact
             path="/wma/schedules/update"
             Component={ScheduleUpdate}
