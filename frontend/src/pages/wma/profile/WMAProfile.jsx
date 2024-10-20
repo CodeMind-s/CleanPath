@@ -47,8 +47,8 @@ const WMAProfile = () => {
     fetchProfile();
   }, []);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!profile) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+  // if (!profile) return <div>Loading...</div>;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,10 +70,13 @@ const WMAProfile = () => {
     data.append("upload_preset", "GarboGoUser_Preset");
     data.append("cloud_name", "dg8cpnx1m");
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/dg8cpnx1m/image/upload", {
-      method: "POST",
-      body: data,
-    });
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dg8cpnx1m/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
     const imageUrl = await res.json();
     return imageUrl.url;
   };
@@ -141,7 +144,7 @@ const WMAProfile = () => {
                 <div className="justify-center flex">
                   <div className=" flex flex-col justify-center space-y-3">
                     <div className=" text-[24px] font-bold text-[#48752c]">
-                      <span>{profile.wmaname}</span>
+                      <span>{profile?.wmaname}</span>
                     </div>
                     <div className="">
                       <img
@@ -149,7 +152,7 @@ const WMAProfile = () => {
                         alt="Logo"
                         className="mx-auto w-[20px] h-[20px] mr-4  inline-block"
                       />
-                      <span>{profile.address}</span>
+                      <span>{profile?.address}</span>
                     </div>
                     <div className="">
                       <img
@@ -157,7 +160,7 @@ const WMAProfile = () => {
                         alt="Logo"
                         className="mx-auto w-[20px] h-[20px] mr-4  inline-block"
                       />
-                      <span>{profile.email}</span>
+                      <span>{profile?.email}</span>
                     </div>
                     <div className="">
                       <img
@@ -165,7 +168,7 @@ const WMAProfile = () => {
                         alt="Logo"
                         className="mx-auto w-[20px] h-[20px] mr-4 inline-block"
                       />
-                      <span>{profile.contact}</span>
+                      <span>{profile?.contact}</span>
                     </div>
                   </div>
                 </div>
@@ -182,11 +185,11 @@ const WMAProfile = () => {
                   />
                 </div>
                 <div className="items-center justify-center px-5 flex flex-col bg-[#48752c] text-center rounded-3xl shadow-lg p-2">
-                <h1 className="text-[24px] font-bold text-[#f9da78]">
-                  {profile.authNumber}
-                </h1>
-                <h1 className="text-[16px] text-white">Auth Number</h1>
-              </div>
+                  <h1 className="text-[24px] font-bold text-[#f9da78]">
+                    {profile?.authNumber}
+                  </h1>
+                  <h1 className="text-[16px] text-white">Auth Number</h1>
+                </div>
               </div>
             </div>
           </div>
@@ -218,7 +221,6 @@ const WMAProfile = () => {
                       className="py-2 px-5 bg-[#64625c1a] text-[16px] rounded-br-full rounded-bl-full rounded-tl-full"
                     />
                   </div>
-                  
 
                   <div className="items-center flex flex-col justify-center">
                     <div className="w-full my-2">
