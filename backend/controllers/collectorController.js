@@ -1,5 +1,6 @@
 import Collector from "../models/collectorModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
+import { generateCollectorToken } from "../utils/createToken.js";
 
 /**
  * @route   POST /api/collector
@@ -31,6 +32,81 @@ const createCollector = asyncHandler(async (req, res) => {
 
   const createdCollector = await collector.save();
   res.status(201).json(createdCollector);
+});
+
+/**
+ * @route   POST /api/collector/auth
+ * @desc    Authenticate user and get token
+ * @access  Public
+ * @param   {String} collectorNIC - The email of the user (required)
+ * @param   {String} truckNumber - The password of the user (required)
+ * @returns {Object} - A JSON object containing the user data and the authentication token
+ * @throws  {400} If the collectorNIC or truckNumber is missing or invalid
+ * @throws  {401} If the collectorNIC or truckNumber is incorrect
+ * @throws  {500} If a server error occurs
+ */
+const loginCollector = asyncHandler(async (req, res) => {
+  const { collectorNIC, truckNumber } = req.body;
+
+  // Check if user exists
+  const existingCollector = await Collector.findOne({ collectorNIC });
+
+  if (existingCollector) {
+    // Compare the provided password with the hashed password in the database
+    // const isPasswordValid = await bcrypt.compare(truckNumber, existingCollector.truckNumber);
+
+    if (existingCollector.truckNumber === truckNumber) {
+      // Generate token if the user is valid
+      const token = generateCollectorToken(res, existingCollector._id);
+
+      res.status(201).json({
+        _id: existingCollector._id,
+        wmaId: existingCollector.wmaId,
+        truckNumber: existingCollector.truckNumber,
+        collectorName: existingCollector.collectorName,
+        collectorNIC: existingCollector.collectorNIC,
+        contactNo: existingCollector.contactNo,
+        statusOfCollector: existingCollector.statusOfCollector,
+        token: token,
+      });
+    } else {
+      // Send error response for incorrect password
+      res.status(401);
+      throw new Error("Invalid truck number.");
+    }
+  } else {
+    // Send error response if user is not found
+    res.status(404);
+    throw new Error("Collector not found.");
+  }
+});
+
+/**
+ * @route   GET /api/collector/profile
+ * @desc    Retrieve the current collector's profile
+ * @access  Private
+ * @header  {String} Authorization - The bearer token of the collector (required)
+ * @returns {Object} - A JSON object containing the collectores's profile data
+ * @throws  {401} If the collector is not authenticated
+ * @throws  {500} If a collector error occurs
+ */
+const getCurrentCollectorProfile = asyncHandler(async (req, res) => {
+  console.log("req.collector:", req.collector);
+  const collector = await Collector.findById(req.collector._id);
+  if (collector) {
+    res.json({
+      _id: collector._id,
+      wmaId: collector.wmaId,
+      truckNumber: collector.truckNumber,
+      collectorName: collector.collectorName,
+      collectorNIC: collector.collectorNIC,
+      contactNo: collector.contactNo,
+      statusOfCollector: collector.statusOfCollector,
+    });
+  } else {
+    res.status(404);
+    throw new Error("collector not found!");
+  }
 });
 
 /**
@@ -119,4 +195,22 @@ const deleteCollector = asyncHandler(async (req, res) => {
   }
 });
 
-export {createCollector, getAllCollectors, getCollectorsByWMA, updateCollector, deleteCollector, getCollectorById};
+/**
+ * @route   POST /api/collector/logout
+ * @desc    Log out the current collector
+ * @access  Private
+ * @header  {String} Authorization - The bearer token of the collector (required)
+ * @returns {Object} - A JSON object with a message confirming the logout
+ * @throws  {401} If the user is not authenticated
+ * @throws  {500} If a server error occurs
+ */
+const logoutCurrentCollector = asyncHandler(async (req, res) => {
+  res.cookie("jwt_collector", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: "Logged out successfully!" });
+});
+
+export {createCollector, getAllCollectors, getCollectorsByWMA, updateCollector, deleteCollector, getCollectorById, loginCollector, getCurrentCollectorProfile, logoutCurrentCollector};

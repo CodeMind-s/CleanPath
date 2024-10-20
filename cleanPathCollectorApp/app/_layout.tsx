@@ -61,7 +61,7 @@ export default function RootLayout() {
       <Stack.Screen
         name="(routes)/updategarbage/index"
         options={{
-          header: () => <CustomHeader onBack={() => router.back()} title="Update Garbage" />,
+          header: () => <CustomHeader onBack={() => router.back()} title="Update Bin Status" />,
         }}
       />
       <Stack.Screen
@@ -70,7 +70,7 @@ export default function RootLayout() {
           header: () => <CustomHeader onBack={() => router.back()} title="Earning Summary" />,
         }}
       />
-      </Stack>
+    </Stack>
   );
 
 
@@ -79,11 +79,11 @@ export default function RootLayout() {
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ onBack, title }) => (
   <View style={styles.headerContainer}>
-     {title !== "Clean Path" && title !== "Login" && (
+    {title !== "Clean Path" && title !== "Login" && (
       <TouchableOpacity onPress={onBack} style={styles.backButton}>
-      <Ionicons name="arrow-back-circle-outline" size={28} color="white" />
-    </TouchableOpacity>
-     )}
+        <Ionicons name="arrow-back-circle-outline" size={28} color="white" />
+      </TouchableOpacity>
+    )}
 
     {/* Apply the title prop to the header text */}
     <Text style={styles.headerText}>{title}</Text>

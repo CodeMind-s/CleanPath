@@ -143,17 +143,17 @@ const UserTransaction = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Summary</h2>
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-yellow-100 p-5 rounded-lg text-left flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-gray-600">
+            <h3 className="text-lg font-semibold text-gray-600">
               Total Amount To Be Paid
             </h3>
-            <p className="text-[40px] font-bold text-yellow-600">
+            <p className="text-[35px] font-bold text-yellow-600">
               LKR {totalUnpaidAmount}.00
             </p>
           </div>
 
           <div className="bg-green-100 p-5 rounded-lg text-left flex items-center justify-between">
             <div className="flex flex-col justify-start items-start">
-              <h3 className="text-xl font-semibold text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-600">
                 Total Amount Paid
               </h3>
               <Link to="/user/my-transaction/history">
@@ -165,7 +165,7 @@ const UserTransaction = () => {
                 </button>
               </Link>
             </div>
-            <p className="text-[40px] font-bold text-green-600">
+            <p className="text-[35px] font-bold text-green-600">
               LKR {totalPaidAmount}.00
             </p>
           </div>

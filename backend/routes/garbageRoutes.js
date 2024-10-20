@@ -6,6 +6,7 @@ import {
   getGarbageRequestById,
   updateGarbageRequest,
   deleteGarbageRequest,
+  getGarbageRequestByArea
 } from "../controllers/garbageController.js";
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
@@ -19,6 +20,7 @@ router
 
 // Route to get garbage requests for a specific user
 router.route("/garbage-requests").get(authenticate, getUserGarbageRequests);
+router.route("/garbage-requests-area/:id").get(getGarbageRequestByArea);
 
 // Routes to get, update, and delete a garbage request by ID
 router

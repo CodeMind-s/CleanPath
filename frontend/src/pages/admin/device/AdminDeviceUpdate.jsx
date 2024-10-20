@@ -3,14 +3,46 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AdminDrawer from "../components/AdminDrawer";
 import { updateSmartDeviceRequest } from "../../../api/smartDeviceApi"; // Update the path accordingly
 import { ToastContainer, toast } from "react-toastify";
+import { createTransaction } from "../../../api/transactionApi";
 
 const AdminDeviceUpdate = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [status, setStatus] = useState(location.state.device.status);
-
+  console.log(`location.state.device => `, location.state.device);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (status === "Distributed") {
+      const newTransaction = {
+        userID: location.state.device.userId._id,
+        description: `Garbage Bin Fee: ${
+          location.state.device.type === "recyclable"
+            ? "Recyclable"
+            : "Non-Recyclable"
+        }`,
+        isRefund: false,
+        isPaid: false,
+        amount: 1000,
+      };
+
+      try {
+        // console.log(`newTransaction => `, newTransaction);
+        await createTransaction(newTransaction); // Create the transaction
+        toast.success("Transaction created successfully!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } catch (error) {
+        console.error("Error creating transaction:", error);
+        toast.error("Failed to create transaction.");
+      }
+    }
 
     try {
       // Update the device status

@@ -41,7 +41,7 @@ const TransactionHistoryModal = ({ user, onClose }) => {
                       transaction.isPaid
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
-                    } font-medium px-2.5 py-0.5 rounded`}
+                    } font-medium px-1 py-0.5 rounded`}
                   >
                     {transaction.isPaid ? "Paid" : "Not Paid"}
                   </span>

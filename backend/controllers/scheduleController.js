@@ -56,7 +56,7 @@ const getAllSchedules = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of schedules assingd to the truck
  */
 const getTruckSchedules = asyncHandler(async (req, res) => {
-  const schedule = await Schedule.find({ collectorId: req.params.id })
+  const schedule = await Schedule.find({ collectorId: req.collector._id }).populate("area", "name")
 
   res.json(schedule);
 });
