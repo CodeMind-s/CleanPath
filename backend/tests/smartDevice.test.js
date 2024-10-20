@@ -1,5 +1,6 @@
 import request from "supertest";
 import app from "../index"; // Ensure this points to where your Express app is exported
+import SmartDevice from "../models/smartDeviceModel";
 
 // Test suite for GET /api/smartDevices/
 describe("GET /api/smartDevices/", () => {
@@ -127,5 +128,37 @@ describe("POST /api/smartDevices/", () => {
 
     // Check for error message in response body
     expect(res.body.message).toBe("Area not found.");
+  });
+});
+
+// Test suite for DELETE /api/smartDevices/:id
+describe("DELETE /api/smartDevices/:id", () => {
+  // Test case: Should delete a smart device (Admin only)
+  it("deletes a smart device successfully when requested by an admin", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWEzNmMxYjNmODViMmZmMTlmMjUiLCJpYXQiOjE3MjkzNTQwNDQsImV4cCI6MTczMTk0NjA0NH0.IQZJsB06DG3AbmfApGUe1lgo0NhJdyS52elYOtoqeeg"; // Replace with a valid admin JWT token
+
+    // Assuming you create a device for testing purpose
+    const newDevice = await SmartDevice.create({
+      userId: "6713aac5c1b3f85b2ff19f2c", // Ensure this is a valid user ID
+      area: "6704064d5ad2461800050f1f", // Ensure this is a valid area ID
+      longitude: 79.3211,
+      latitude: 6.3216,
+      type: "recyclable",
+    });
+
+    const res = await request(app)
+      .delete(`/api/smartDevices/${newDevice._id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    // Check for successful response status
+    expect(res.statusCode).toBe(200);
+
+    // Check for the expected response message
+    expect(res.body).toEqual({ message: "Smart device removed successfully!" });
+
+    // Verify the device is actually deleted
+    const deletedDevice = await SmartDevice.findById(newDevice._id);
+    expect(deletedDevice).toBeNull();
   });
 });
