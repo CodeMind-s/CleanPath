@@ -28,6 +28,6 @@ router
   .route("/:id")
   .get(getSmartDeviceById) // Authenticated users can get a smart device by ID
   .put(authenticate, authorizeAdmin, updateSmartDevice) // Only admins can update a smart device
-  .delete(authenticate, authorizeAdmin, deleteSmartDevice); // Only admins can delete a smart device
+  .delete(authenticate, deleteSmartDevice); // Only admins can delete a smart device
 
 export default router;
