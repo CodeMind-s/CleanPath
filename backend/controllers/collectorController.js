@@ -14,9 +14,10 @@ import { generateCollectorToken } from "../utils/createToken.js";
  * @returns {Object} - A JSON object containing the newly created schedule data
  */
 const createCollector = asyncHandler(async (req, res) => {
-  const { wmaId, truckNumber, collectorName, collectorNIC, contactNo} = req.body;
+  const { wmaId, truckNumber, collectorName, collectorNIC, contactNo } =
+    req.body;
 
-  if (!wmaId || !truckNumber || !collectorName || !collectorNIC || !contactNo ) {
+  if (!wmaId || !truckNumber || !collectorName || !collectorNIC || !contactNo) {
     res.status(400);
     throw new Error("Please fill all required fields.");
   }
@@ -27,7 +28,7 @@ const createCollector = asyncHandler(async (req, res) => {
     collectorName,
     collectorNIC,
     contactNo,
-    statusOfCollector: 'Available'
+    statusOfCollector: "Available",
   });
 
   const createdCollector = await collector.save();
@@ -116,7 +117,7 @@ const getCurrentCollectorProfile = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of all schedules
  */
 const getAllCollectors = asyncHandler(async (req, res) => {
-  const collectors = await Collector.find({}).populate("wmaId", "wmaname")
+  const collectors = await Collector.find({}).populate("wmaId", "wmaname");
   res.json(collectors);
 });
 
@@ -127,7 +128,7 @@ const getAllCollectors = asyncHandler(async (req, res) => {
  * @returns {Array} - A list of schedules assingd to the truck
  */
 const getCollectorsByWMA = asyncHandler(async (req, res) => {
-  const collectors = await Collector.find({ wmaId: req.params.id })
+  const collectors = await Collector.find({ wmaId: req.params.id });
   res.json(collectors);
 });
 
@@ -138,7 +139,7 @@ const getCollectorsByWMA = asyncHandler(async (req, res) => {
  * @returns {Object} - A single schedule
  */
 const getCollectorById = asyncHandler(async (req, res) => {
-  const collector = await Collector.findById(req.params.id)
+  const collector = await Collector.findById(req.params.id);
   if (collector) {
     res.json(collector);
   } else {
@@ -158,7 +159,14 @@ const getCollectorById = asyncHandler(async (req, res) => {
  * @returns {Object} - The updated garbage request
  */
 const updateCollector = asyncHandler(async (req, res) => {
-  const { wmaId, truckNumber, collectorName, collectorNIC, statusOfCollector, contactNo} = req.body;
+  const {
+    wmaId,
+    truckNumber,
+    collectorName,
+    collectorNIC,
+    statusOfCollector,
+    contactNo,
+  } = req.body;
 
   const collector = await Collector.findById(req.params.id);
 
@@ -168,7 +176,8 @@ const updateCollector = asyncHandler(async (req, res) => {
     collector.collectorName = collectorName || collector.collectorName;
     collector.collectorNIC = collectorNIC || collector.collectorNIC;
     collector.contactNo = contactNo || collector.contactNo;
-    collector.statusOfCollector = statusOfCollector || collector.statusOfCollector;
+    collector.statusOfCollector =
+      statusOfCollector || collector.statusOfCollector;
 
     const updatedCollector = await collector.save();
     res.json(updatedCollector);
@@ -188,6 +197,7 @@ const deleteCollector = asyncHandler(async (req, res) => {
   const collctor = await Collector.findByIdAndDelete(req.params.id);
 
   if (collctor) {
+    res.status(200);
     res.json({ message: "Collector removed successfully!" });
   } else {
     res.status(404);
@@ -213,4 +223,14 @@ const logoutCurrentCollector = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out successfully!" });
 });
 
-export {createCollector, getAllCollectors, getCollectorsByWMA, updateCollector, deleteCollector, getCollectorById, loginCollector, getCurrentCollectorProfile, logoutCurrentCollector};
+export {
+  createCollector,
+  getAllCollectors,
+  getCollectorsByWMA,
+  updateCollector,
+  deleteCollector,
+  getCollectorById,
+  loginCollector,
+  getCurrentCollectorProfile,
+  logoutCurrentCollector,
+};

@@ -88,8 +88,8 @@ describe("DELETE /api/garbage/:id", () => {
   // Test case: Should successfully delete a garbage request
   it("should delete a garbage request", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
-    const garbageId = "671492e2ab8a5f97f954135a"; // Replace with a valid garbage ID
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDc5ODgsImV4cCI6MTczMTkzOTk4OH0.9-INxvW4PBCxTrFmwTS3Cq9_8WDV7jrVg_-HDrEdZcM"; // Replace with a valid JWT token
+    const garbageId = "6713bc036587b324ea9970a7"; // Replace with a valid garbage ID
 
     const res = await request(app)
       .delete(`/api/garbage/${garbageId}`)
@@ -104,7 +104,7 @@ describe("DELETE /api/garbage/:id", () => {
 
   // Test case: Should fail to delete a garbage request without a token
   it("should fail to delete a garbage request without a token", async () => {
-    const garbageId = "671492e2ab8a5f97f954135a"; // Replace with a valid garbage ID
+    const garbageId = "6713bc036587b324ea9970a7"; // Replace with a valid garbage ID
 
     const res = await request(app).delete(`/api/garbage/${garbageId}`);
 
@@ -115,7 +115,7 @@ describe("DELETE /api/garbage/:id", () => {
   // Test case: Should fail to delete a garbage request with an invalid ID
   it("should fail to delete a garbage request with an invalid ID", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDc5ODgsImV4cCI6MTczMTkzOTk4OH0.9-INxvW4PBCxTrFmwTS3Cq9_8WDV7jrVg_-HDrEdZcM"; // Replace with a valid JWT token
 
     const invalidId = "67136163761e1471asdasdqed4cd5ce6"; // Invalid garbage ID
 
