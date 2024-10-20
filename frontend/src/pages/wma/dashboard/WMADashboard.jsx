@@ -7,7 +7,7 @@ import { getAllSchedulesInWma } from "../../../api/scheduleApi";
 import AuthService from "../../../api/wmaApi";
 
 const WMADashboard = () => {
-  const [totalIncome, setTotalIncome] = useState(0); 
+  const [totalIncome, setTotalIncome] = useState(15000); 
   const [totalSchedules, setTotalSchedules] = useState(0);
   const [registeredCollectors, setRegisteredCollectors] = useState(0);
   const [wmaId, setWmaId] = useState(null); 

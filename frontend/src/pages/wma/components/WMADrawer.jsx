@@ -107,11 +107,11 @@ const WMADrawer = ({ children }) => {
             text: "Collectors",
             link: "/wma/collectors",
           },
-          {
-            icon: <PaidIcon sx={iconStyle} />,
-            text: "Transactions",
-            link: "/wma/transactions",
-          },
+          // {
+          //   icon: <PaidIcon sx={iconStyle} />,
+          //   text: "Transactions",
+          //   link: "/wma/transactions",
+          // },
           {
             icon: <ScheduleIcon sx={iconStyle} />, // Add ScheduleIcon here
             text: "Schedules",

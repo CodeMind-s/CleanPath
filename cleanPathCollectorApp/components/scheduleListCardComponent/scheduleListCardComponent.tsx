@@ -62,7 +62,7 @@ const ScheduleListCardComponent: React.FC<ScheduleListCardComponentProps> = ({
         </View>
         <View className="w-1/3 h-[2px] bg-tertiary flex justify-center items-center relative">
           <View className="w-[45px] h-[45px] bg-primary rounded-full flex items-center z-10 justify-around">
-            <Ionicons name="bus" size={21} color="white" />
+            <Ionicons name="trash" size={21} color="white" />
           </View>
           <View className="absolute top-1/2 left-0 h-[3px] w-full bg-gray-300"></View>
           <View className="absolute -top-[0.8px] rounded-full left-0 h-[6px] aspect-square bg-gray-300"></View>

@@ -40,6 +40,7 @@ export default function TabsIndex() {
         {/* Truck Number */}
         <Text className="text-sm mb-2 mt-4 text-gray-400">Truck Number</Text>
         <TextInput
+          
           value={truckNumber}
           onChangeText={setTruckNumber}
           className="border-2 border-gray-400 rounded-lg w-full p-2"

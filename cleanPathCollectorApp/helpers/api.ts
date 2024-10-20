@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 
 // Define the base URL for your API
-const BASE_URL = "http://192.168.1.7:5000/api/";
+const BASE_URL = "http://192.168.130.62:5000/api/";
 
 // Create an axios instance with default configurations
 const api = axios.create({

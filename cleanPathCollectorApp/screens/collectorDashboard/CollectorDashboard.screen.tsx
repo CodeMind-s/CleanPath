@@ -93,12 +93,12 @@ const CollectorDashboard = () => {
     <View className=' p-5'>
       <View className="flex flex-row">
         <Image
-          source={{ uri: 'https://t4.ftcdn.net/jpg/02/18/58/51/360_F_218585163_hKijGOfFIkC3Fuo9JgX2sVGv69UKoXmM.jpg' }}
+          source={{ uri: 'https://th.bing.com/th/id/OIP.JEwpvu9u48twP24qusBd7AHaLH?w=853&h=1280&rs=1&pid=ImgDetMain' }}
           style={{ width: 50, height: 50 }}
           className="rounded-full mr-3"
         />
         <View>
-          <Text className=" text-[16px] " style={{ fontWeight: "900" }}>{greeting}</Text>
+          <Text className=" text-[16px] font-semibold ">{greeting}</Text>
           <Text className=" text-[20px] font-extrabold text-primary " style={{ fontWeight: "900" }}>
             {currentCollector?.collectorName}
           </Text>
@@ -107,7 +107,7 @@ const CollectorDashboard = () => {
 
       <TouchableOpacity
         onPress={() => router.push("/(routes)/map")}
-        className=" w-full py-3 bg-primary rounded-xl mt-5"
+        className=" w-full py-4 bg-primary rounded-xl mt-5"
       >
         <View className="flex flex-row justify-center gap-2 items-center">
           <Ionicons name="location" size={21} color="white" />
@@ -119,7 +119,7 @@ const CollectorDashboard = () => {
 
       <TouchableOpacity
         onPress={() => router.push("/(routes)/schedule")}
-        className=" w-full py-3 bg-primary rounded-xl mt-5"
+        className=" w-full py-4 bg-primary rounded-xl mt-5"
       >
         <View className="flex flex-row justify-center gap-2 items-center">
           <Ionicons name="calendar" size={21} color="white" />
@@ -129,7 +129,7 @@ const CollectorDashboard = () => {
         </View>
       </TouchableOpacity>
 
-      <View className="flex flex-row items-center justify-between mt-4 ">
+      <View className="flex flex-row items-center justify-between mt-5 ">
         {!isPermissionGranted && (
           <Pressable
             onPress={requestPermission}
@@ -157,7 +157,7 @@ const CollectorDashboard = () => {
       </View>
 
 
-    <Text className=" mt-3 font-semibold text-lg">Current Journey</Text>
+    <Text className=" mt-4 font-semibold text-lg">Current Journey</Text>
     <View className=' h-[20%] flex justify-center items-center'>
     {progressSchedules.length > 0 ? (
           progressSchedules.map((schedule) => {
@@ -202,7 +202,7 @@ const CollectorDashboard = () => {
         </TouchableOpacity>
       </View>
     </View>
-    <View className=' flex flex-row mt-3 justify-end '>
+    <View className=' flex flex-row mt-5 justify-end '>
     <TouchableOpacity
           onPress={logoutHandler}
           className=" border-primary border-2 rounded-lg py-2 px-5 w-[50%]"

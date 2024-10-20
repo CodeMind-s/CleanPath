@@ -203,6 +203,15 @@ const MapScreen = () => {
                 const userLocation = [${location?.latitude}, ${location?.longitude}];
                 L.marker(userLocation, { icon: userLocationIcon }).addTo(mymap).bindPopup('Your Location');
                 mymap.setView(userLocation, 12);
+                const garbLocation1 = [6.908173, 79.892441];
+                L.marker(garbLocation1, { icon: redIcon }).addTo(mymap).bindPopup('9th lane, Rajagiriya');
+                const garbLocation2 = [6.905255, 79.900230];
+                L.marker(garbLocation2, { icon: greenIcon }).addTo(mymap).bindPopup('sal uyana, Rajagiriya');
+                const garbLocation3 = [6.910580, 79.891197];
+                L.marker(garbLocation3, { icon: greenIcon }).addTo(mymap).bindPopup('2nd lane, Rajagiriya');
+                const garbLocation4 = [6.907662, 79.899501];
+                L.marker(garbLocation4, { icon: redIcon}).addTo(mymap).bindPopup('Rajagiriya');
+                
 
                 ${searchResult}
 
