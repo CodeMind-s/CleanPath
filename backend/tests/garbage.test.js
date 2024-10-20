@@ -28,14 +28,14 @@ describe("POST /api/garbage/", () => {
   // Test case: Should create a new garbage request with valid data
   it("should create a garbage request", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
 
     const res = await request(app)
       .post("/api/garbage/")
       .set("Authorization", `Bearer ${token}`) // Set Authorization header
       .send({
-        longitude: 79.3211,
-        latitude: 6.3216,
+        longitude: 77.777,
+        latitude: 23.2323,
         type: "Recyclable",
         address: "Testing address",
         area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID
@@ -65,7 +65,7 @@ describe("POST /api/garbage/", () => {
   // Test case: Should fail to create a garbage request with invalid data
   it("should fail to create a garbage request with invalid data", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
 
     const res = await request(app)
       .post("/api/garbage/")
@@ -88,8 +88,8 @@ describe("DELETE /api/garbage/:id", () => {
   // Test case: Should successfully delete a garbage request
   it("should delete a garbage request", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
-    const garbageId = "67139425f6895d480b08025f"; // Replace with a valid garbage ID
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
+    const garbageId = "671492e2ab8a5f97f954135a"; // Replace with a valid garbage ID
 
     const res = await request(app)
       .delete(`/api/garbage/${garbageId}`)
@@ -104,7 +104,7 @@ describe("DELETE /api/garbage/:id", () => {
 
   // Test case: Should fail to delete a garbage request without a token
   it("should fail to delete a garbage request without a token", async () => {
-    const garbageId = "67139425f6895d480b08025f"; // Replace with a valid garbage ID
+    const garbageId = "671492e2ab8a5f97f954135a"; // Replace with a valid garbage ID
 
     const res = await request(app).delete(`/api/garbage/${garbageId}`);
 
@@ -115,7 +115,7 @@ describe("DELETE /api/garbage/:id", () => {
   // Test case: Should fail to delete a garbage request with an invalid ID
   it("should fail to delete a garbage request with an invalid ID", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMjI2NzgsImV4cCI6MTczMTkxNDY3OH0.PU47E_SrK6ECOXgO6ofW2rNwUYv2Dz5Rl3mtlN8shAs"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
 
     const invalidId = "67136163761e1471asdasdqed4cd5ce6"; // Invalid garbage ID
 
