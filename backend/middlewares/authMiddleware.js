@@ -104,11 +104,12 @@ const authenticateCollector = asyncHandler(async (req, res, next) => {
 
   token = req.cookies.jwt_collector;
 
-
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.collector = await Collector.findById(decoded.collectorNIC).select("-truckNumber");
+      req.collector = await Collector.findById(decoded.collectorNIC).select(
+        "-truckNumber"
+      );
       next();
     } catch (error) {
       res.status(401);
