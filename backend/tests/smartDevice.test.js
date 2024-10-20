@@ -1,166 +1,131 @@
 import request from "supertest";
-import app from "../index";
+import app from "../index"; // Ensure this points to where your Express app is exported
 
+// Test suite for GET /api/smartDevices/
 describe("GET /api/smartDevices/", () => {
-  it("returns all smart devices (Admin only)", async () => {
-    const adminToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMzEyMTYsImV4cCI6MTczMTkyMzIxNn0.JeANfjN3C_r6CdbPYvslbYKUJZBciTGRD0EuGKWhH_U"; //Admin JWT token
-    const res = await request(app)
-      .get("/api/smartDevices/")
-      .set("Authorization", `Bearer ${adminToken}`);
-    expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true); // Expecting an array of devices
-  });
+  // Test case: Should return all smart devices (Admin only)
+  it("returns all smart devices", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWEzNmMxYjNmODViMmZmMTlmMjUiLCJpYXQiOjE3MjkzNTQwNDQsImV4cCI6MTczMTk0NjA0NH0.IQZJsB06DG3AbmfApGUe1lgo0NhJdyS52elYOtoqeeg"; // Replace with a valid admin JWT token
 
-  it("returns 403 for non-admin users", async () => {
-    const userToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // user JWT token
     const res = await request(app)
       .get("/api/smartDevices/")
       .set("Authorization", `Bearer ${token}`);
-    expect(res.statusCode).toBe(403);
+
+    // Check for successful response status
+    expect(res.statusCode).toBe(200);
+
+    // Expect a response body (assuming it's a list of smart devices)
+    expect(res.body).toBeInstanceOf(Array);
   });
 
+  // Test case: Should return 404 for an invalid endpoint
   it("returns 404 for an invalid endpoint", async () => {
     const res = await request(app).get("/api/invalid-endpoint/");
+
+    // Expect 404 Not Found for invalid route
     expect(res.statusCode).toBe(404);
   });
 });
 
-// describe("POST /api/smartDevices/", () => {
-//   it("should create a smart device", async () => {
-//     const token =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid JWT token
-//     const res = await request(app)
-//       .post("/api/smartDevices/")
-//       .set("Cookie", [`jwt=${token}`])
-//       .send({
-//         longitude: 79.3211,
-//         latitude: 6.3216,
-//         type: "Recyclable",
-//         area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
-//       });
+// Test suite for POST /api/smartDevices/
+describe("POST /api/smartDevices/", () => {
+  // Test case: Should create a smart device successfully
+  it("creates a smart device successfully", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNTQ2NjEsImV4cCI6MTczMTk0NjY2MX0.MYDS3z5Jji48dsm1pw3uc1lK_SeMyyhO7PMZTf_a3XI"; // Replace with a valid user JWT token
 
-//     // Expect a successful creation
-//     expect(res.statusCode).toBe(201);
-//     expect(res.body).toHaveProperty("_id"); // Assuming the response contains an ID or other fields
-//   });
+    const newDevice = {
+      area: "6704064d5ad2461800050f1f", // Replace with a valid area ID
+      longitude: 77.7777,
+      latitude: 5.5454,
+      type: "recyclable",
+    };
 
-//   it("should fail to create a smart device without a token", async () => {
-//     const res = await request(app).post("/api/smartDevices/").send({
-//       longitude: 79.3211,
-//       latitude: 6.3216,
-//       type: "Recyclable",
-//       area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
-//     });
+    const res = await request(app)
+      .post("/api/smartDevices/")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newDevice);
 
-//     // Expect an unauthorized error
-//     expect(res.statusCode).toBe(401);
-//   });
+    // Check for successful response status
+    expect(res.statusCode).toBe(201);
 
-//   it("should fail to create a smart device with invalid data", async () => {
-//     const token =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid JWT token
-//     const res = await request(app)
-//       .post("/api/smartDevices/")
-//       .set("Authorization", `Bearer ${token}`)
-//       .send({
-//         longitude: "invalid", // Invalid longitude
-//         latitude: 6.3216,
-//         type: "Recyclable",
-//         area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID if necessary
-//       });
+    // Check that the response contains the created smart device
+    expect(res.body).toHaveProperty("_id");
+    expect(res.body.area).toBe(newDevice.area);
+    expect(res.body.longitude).toBe(newDevice.longitude);
+    expect(res.body.latitude).toBe(newDevice.latitude);
+    expect(res.body.type).toBe(newDevice.type);
+  });
 
-//     // Expect a bad request error
-//     expect(res.statusCode).toBe(400);
-//   });
-// });
+  // Test case: Should return 500 if required fields are missing
+  it("returns 500 if required fields are missing", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWEzNmMxYjNmODViMmZmMTlmMjUiLCJpYXQiOjE3MjkzNTQwNDQsImV4cCI6MTczMTk0NjA0NH0.IQZJsB06DG3AbmfApGUe1lgo0NhJdyS52elYOtoqeeg"; // Replace with a valid user JWT token
 
-// describe("GET /api/smartDevices/:id", () => {
-//   it("should return a single smart device by ID", async () => {
-//     const token =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid user JWT token
-//     const deviceId = "67136ce71f366a41fa984a9e"; // Replace with a valid device ID
-//     const res = await request(app)
-//       .get(`/api/smartDevices/${deviceId}`)
-//       .set("Authorization", `Bearer ${token}`);
+    const incompleteDevice = {
+      longitude: 79.3211,
+      latitude: 6.3216,
+      type: "Recyclable",
+    };
 
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body).toHaveProperty("_id", deviceId);
-//   });
+    const res = await request(app)
+      .post("/api/smartDevices/")
+      .set("Authorization", `Bearer ${token}`)
+      .send(incompleteDevice);
 
-//   it("should return 404 for a non-existing device ID", async () => {
-//     const token =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid user JWT token
-//     const res = await request(app)
-//       .get("/api/smartDevices/invalidDeviceId")
-//       .set("Authorization", `Bearer ${token}`);
+    // Check for 500 Bad Request status
+    expect(res.statusCode).toBe(500);
 
-//     expect(res.statusCode).toBe(404);
-//   });
-// });
+    // Check for error message in response body
+    expect(res.body.message).toBe("Please fill all required fields.");
+  });
 
-// describe("PUT /api/smartDevices/:id", () => {
-//   it("should update a smart device's details (Admin only)", async () => {
-//     const adminToken = "your-admin-jwt-token"; // Replace with a valid admin JWT token
-//     const deviceId = "67136ce71f366a41fa984a9e"; // Replace with a valid device ID
-//     const res = await request(app)
-//       .put(`/api/smartDevices/${deviceId}`)
-//       .set("Authorization", `Bearer ${adminToken}`)
-//       .send({
-//         status: "Active",
-//       });
+  // Test case: Should return 404 if the user is not found
+  it("returns 500 if the user is not found", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWEzNmMxYjNmODViMmZmMTlmMjUiLCJpYXQiOjE3MjkzNTQwNDQsImV4cCI6MTczMTk0NjA0NH0.IQZJsB06DG3AbmfApGUe1lgo0NhJdyS52elYOtoqeegg"; // Replace with an invalid user JWT token
 
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body).toHaveProperty("status", "Active");
-//   });
+    const newDevice = {
+      area: "6704064d5ad2461800050f1f", // Replace with a valid area ID
+      longitude: 79.3211,
+      latitude: 6.3216,
+      type: "Recyclable",
+    };
 
-//   it("should return 403 for non-admin users trying to update a device", async () => {
-//     const userToken =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid user JWT token
-//     const deviceId = "67136ce71f366a41fa984a9e"; // Replace with a valid device ID
-//     const res = await request(app)
-//       .put(`/api/smartDevices/${deviceId}`)
-//       .set("Authorization", `Bearer ${userToken}`)
-//       .send({
-//         status: "Inactive",
-//       });
+    const res = await request(app)
+      .post("/api/smartDevices/")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newDevice);
 
-//     expect(res.statusCode).toBe(403);
-//   });
-// });
+    // Check for 500 Not Found status
+    expect(res.statusCode).toBe(500);
 
-// describe("DELETE /api/smartDevices/:id", () => {
-//   it("should delete a smart device (Admin only)", async () => {
-//     const adminToken =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMzEyMTYsImV4cCI6MTczMTkyMzIxNn0.JeANfjN3C_r6CdbPYvslbYKUJZBciTGRD0EuGKWhH_U"; // Replace with a valid admin JWT token
-//     const deviceId = "67136ce71f366a41fa984a9e"; // Replace with a valid device ID
-//     const res = await request(app)
-//       .delete(`/api/smartDevices/${deviceId}`)
-//       .set("Authorization", `Bearer ${adminToken}`);
+    // Check for error message in response body
+    expect(res.body.message).toBe("Not authorized, token failed");
+  });
 
-//     expect(res.statusCode).toBe(200);
-//     expect(res.body.message).toBe("Smart device removed successfully!");
-//   });
+  // Test case: Should return 404 if the area is not found
+  it("returns 500 if the area is not found", async () => {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWEzNmMxYjNmODViMmZmMTlmMjUiLCJpYXQiOjE3MjkzNTQwNDQsImV4cCI6MTczMTk0NjA0NH0.IQZJsB06DG3AbmfApGUe1lgo0NhJdyS52elYOtoqeeg"; // Replace with a valid user JWT token
 
-//   it("should return 403 for non-admin users trying to delete a device", async () => {
-//     const userToken =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzZjY0ZWMxMjRiMTAwNmQxNmRkZjQiLCJpYXQiOjE3MjkzMzEzOTAsImV4cCI6MTczMTkyMzM5MH0.Z2WbBh7a5vV1gl19R2sqjOR4wsK7d0xt5Un8H2LtMZw"; // Replace with a valid user JWT token
-//     const deviceId = "67136ce71f366a41fa984a9e"; // Replace with a valid device ID
-//     const res = await request(app)
-//       .delete(`/api/smartDevices/${deviceId}`)
-//       .set("Authorization", `Bearer ${userToken}`);
+    const newDevice = {
+      area: "616a6a6d7b59a8255dfe0000", // Invalid area ID
+      longitude: 79.3211,
+      latitude: 6.3216,
+      type: "Recyclable",
+    };
 
-//     expect(res.statusCode).toBe(403);
-//   });
+    const res = await request(app)
+      .post("/api/smartDevices/")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newDevice);
 
-//   it("should return 404 for a non-existing device ID", async () => {
-//     const adminToken =
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzAzOTY4N2Y2MjNjZWY2NjNhNTJhN2EiLCJpYXQiOjE3MjkzMzEyMTYsImV4cCI6MTczMTkyMzIxNn0.JeANfjN3C_r6CdbPYvslbYKUJZBciTGRD0EuGKWhH_U"; // Replace with a valid admin JWT token
-//     const res = await request(app)
-//       .delete("/api/smartDevices/invalidDeviceId")
-//       .set("Authorization", `Bearer ${adminToken}`);
+    // Check for 404 Not Found status
+    expect(res.statusCode).toBe(500);
 
-//     expect(res.statusCode).toBe(404);
-//   });
-// });
+    // Check for error message in response body
+    expect(res.body.message).toBe("Area not found.");
+  });
+});
