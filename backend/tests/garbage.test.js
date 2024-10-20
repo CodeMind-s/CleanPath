@@ -28,14 +28,14 @@ describe("POST /api/garbage/", () => {
   // Test case: Should create a new garbage request with valid data
   it("should create a garbage request", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDc5ODgsImV4cCI6MTczMTkzOTk4OH0.9-INxvW4PBCxTrFmwTS3Cq9_8WDV7jrVg_-HDrEdZcM"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
 
     const res = await request(app)
       .post("/api/garbage/")
       .set("Authorization", `Bearer ${token}`) // Set Authorization header
       .send({
-        longitude: 79.3211,
-        latitude: 6.3216,
+        longitude: 77.777,
+        latitude: 23.2323,
         type: "Recyclable",
         address: "Testing address",
         area: "6703ffa8c936b7432d667c8e", // Replace with a valid area ID
@@ -65,7 +65,7 @@ describe("POST /api/garbage/", () => {
   // Test case: Should fail to create a garbage request with invalid data
   it("should fail to create a garbage request with invalid data", async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDc5ODgsImV4cCI6MTczMTkzOTk4OH0.9-INxvW4PBCxTrFmwTS3Cq9_8WDV7jrVg_-HDrEdZcM"; // Replace with a valid JWT token
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzEzYWZiZDRkYTQ1Mjk0YzA0ZWE0MWUiLCJpYXQiOjE3MjkzNDY0NTksImV4cCI6MTczMTkzODQ1OX0.jUziEFuxJWf3NKfe_txzkwLCEkZ5vVnYUdXjYk_k77Q"; // Replace with a valid JWT token
 
     const res = await request(app)
       .post("/api/garbage/")
