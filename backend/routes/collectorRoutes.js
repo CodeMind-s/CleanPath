@@ -20,10 +20,10 @@ import {
 const router = express.Router();
 
 // Route to create a new collector
-router.route("/").post(authenticateWMA, createCollector).get(getAllCollectors);
-// .post(getCollectorsByWMA)
-// .post(authenticate, authorizeAdmin, createCollector)
-// .get(authenticate, authorizeAdmin, getAllCollectors);
+router
+  .route("/")
+  .post(authenticateWMA, createCollector)
+  .get(getAllCollectors);
 
 router.post("/logout", authenticateCollector, logoutCurrentCollector);
 
@@ -38,7 +38,5 @@ router
   .get(getCollectorById)
   .put(updateCollector)
   .delete(deleteCollector);
-// .put(authenticate, authorizeAdmin, updateCollector)
-// .delete(authenticate, authorizeAdmin, deleteCollector);
 
 export default router;

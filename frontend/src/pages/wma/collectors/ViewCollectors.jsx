@@ -161,7 +161,7 @@ function ViewCollectors() {
                     <GroupRemoveIcon sx={{ fontSize: 30 }}/>
                   </div>  
                 </div>
-                <span className=' text-3xl font-bold p-5'>{collectors.filter((collector) => collector.statusOfCollector === 'Unavailable').length} Collectors</span>
+                <span className=' text-3xl font-bold p-5'>{collectors.filter((collector) => collector.statusOfCollector === 'Not-Available').length} Collectors</span>
               </div>
             </div>
           </div>
@@ -181,7 +181,7 @@ function ViewCollectors() {
                 >
                   <MenuItem value="">All</MenuItem>
                   <MenuItem value="Available">Available</MenuItem>
-                  <MenuItem value="Unavailable">Unavailable</MenuItem>
+                  <MenuItem value="Not-Available">Not-available</MenuItem>
                 </Select>
               </FormControl>
             </div>

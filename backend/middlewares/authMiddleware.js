@@ -60,9 +60,15 @@ const authenticate = asyncHandler(async (req, res, next) => {
 const authenticateWMA = asyncHandler(async (req, res, next) => {
   let token;
 
-  // Read JWT from 'jwt' cookie
-  token = req.cookies.jwt_wma;
-  // console.log(`token from authMiddleware => `, token);
+  // Check JWT in 'Authorization' header or 'jwt_wma' cookie
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1]; // Extract token from Authorization header
+  } else if (req.cookies.jwt_wma) {
+    token = req.cookies.jwt_wma; // Extract token from 'jwt_wma' cookie
+  }
 
   if (token) {
     try {
@@ -78,6 +84,7 @@ const authenticateWMA = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized, no WMA token");
   }
 });
+
 
 /**
  * Middleware to authenticate collector (Web Management Application) users using JWT.

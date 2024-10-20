@@ -80,6 +80,7 @@ const AdminScheduleCreate = () => {
         date, 
         time 
     }
+    console.log(newSchedule)
       await createSchedule(newSchedule);
       toast.success("schedule status Created successfully!", {
         position: "bottom-right",
