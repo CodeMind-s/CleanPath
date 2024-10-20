@@ -72,8 +72,8 @@ function Profile() {
     fetchAllAreas();
   }, []);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!profile) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+  // if (!profile) return <div>Loading...</div>;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -165,7 +165,7 @@ function Profile() {
                 <div className="justify-center flex">
                   <div className="flex flex-col justify-center space-y-3">
                     <div className="text-[24px] font-bold text-[#48752c]">
-                      <span>{profile.username}</span>
+                      <span>{profile?.username}</span>
                     </div>
                     <div>
                       <img
@@ -173,7 +173,7 @@ function Profile() {
                         alt="Location"
                         className="mx-auto w-[20px] h-[20px] mr-4 inline-block"
                       />
-                      <span>{profile.area?.name || "No area selected"}</span>
+                      <span>{profile?.area?.name || "No area selected"}</span>
                     </div>
                     <div>
                       <img
@@ -181,7 +181,7 @@ function Profile() {
                         alt="Email"
                         className="mx-auto w-[20px] h-[20px] mr-4 inline-block"
                       />
-                      <span>{profile.email}</span>
+                      <span>{profile?.email}</span>
                     </div>
                     <div>
                       <img
@@ -189,7 +189,7 @@ function Profile() {
                         alt="Phone"
                         className="mx-auto w-[20px] h-[20px] mr-4 inline-block"
                       />
-                      <span>{profile.contact}</span>
+                      <span>{profile?.contact}</span>
                     </div>
                   </div>
                 </div>
